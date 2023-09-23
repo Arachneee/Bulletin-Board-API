@@ -1,14 +1,14 @@
 package bulletin.board.web.controller;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import bulletin.board.domain.Member;
 import bulletin.board.web.argumentresolver.Login;
 import lombok.RequiredArgsConstructor;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class HomeController {
 	@GetMapping("/")
