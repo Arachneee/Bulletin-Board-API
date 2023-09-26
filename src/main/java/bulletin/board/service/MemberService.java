@@ -32,15 +32,15 @@ public class MemberService {
 	}
 
 	@Transactional
-	public void update(Member currentMember, Long id, String newName) {
-		validateUpdate(currentMember, id, newName);
+	public void update(Long currentMemberId, Long id, String newName) {
+		validateUpdate(currentMemberId, id, newName);
 		Member member = memberRepository.findById(id)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 		member.changeName(newName);
 	}
 
-	private static void validateUpdate(Member currentMember, Long id, String newName) {
-		if (!currentMember.getId().equals(id)) {
+	private static void validateUpdate(Long currentMemberId, Long id, String newName) {
+		if (!currentMemberId.equals(id)) {
 			throw new AuthorityException(ErrorCode.INVALID_AUTHORITY);
 		}
 		if (!StringUtils.hasText(newName)) {
@@ -67,8 +67,9 @@ public class MemberService {
 		return MemberResponse.of(member);
 	}
 
-	public void delete(Member currentMember, Long id) {
-		if (!currentMember.getId().equals(id)) {
+	@Transactional
+	public void delete(Long currentMemberId, Long id) {
+		if (!currentMemberId.equals(id)) {
 			throw new AuthorityException(ErrorCode.INVALID_AUTHORITY);
 		}
 		memberRepository.deleteById(id);

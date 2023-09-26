@@ -1,6 +1,7 @@
 package bulletin.board.web.controller.member;
 
 import java.net.URI;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -8,10 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
@@ -46,8 +45,8 @@ public class MemberController {
 	@PatchMapping("/{id}")
 	public ResponseEntity<Void> update(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
 										@PathVariable("id") Long id,
-										@RequestParam("name") String name) {
-		memberService.update(member, id, name);
+										@RequestBody Map<String, String> nameMap) {
+		memberService.update(member.getId(), id, nameMap.get("name"));
 		return ResponseEntity.ok().build();
 	}
 
@@ -55,7 +54,7 @@ public class MemberController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
 										@PathVariable("id") Long id) {
-		memberService.delete(member, id);
+		memberService.delete(member.getId(), id);
 		return ResponseEntity.noContent().build();
 	}
 
