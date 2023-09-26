@@ -56,4 +56,8 @@ public class Member extends BaseEntity {
 	public boolean isSameName(String name) {
 		return this.name.equals(name);
 	}
+
+	public void changeName(String newName) {
+		setName(newName);
+	}
 }
