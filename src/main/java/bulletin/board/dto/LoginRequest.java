@@ -1,12 +1,11 @@
-package bulletin.board.web.controller.login;
+package bulletin.board.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
-public class LoginDto {
+@Getter @Setter
+public class LoginRequest {
 	@NotBlank
 	private String loginId;
 
