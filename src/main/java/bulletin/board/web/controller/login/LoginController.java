@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,11 +23,12 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/login")
 public class LoginController {
 
 	private final LoginService loginService;
 
-	@PostMapping("/login")
+	@PostMapping("")
 	public ResponseEntity<Map<String,String>> login(@RequestBody @Valid LoginRequest loginRequest,
 						@RequestParam(defaultValue = "/") String redirectURL,
 						HttpServletRequest request) {
@@ -38,7 +40,7 @@ public class LoginController {
 		return ResponseEntity.ok().body(Map.of("redirectURL", redirectURL));
 	}
 
-	@DeleteMapping("/login")
+	@DeleteMapping("")
 	public ResponseEntity<Void> logout(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
 		if (session != null) {
