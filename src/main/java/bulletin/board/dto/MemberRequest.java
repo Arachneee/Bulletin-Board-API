@@ -1,4 +1,4 @@
-package bulletin.board.web.controller.member;
+package bulletin.board.dto;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -6,9 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
-public class MemberCreateDto {
+@Getter @Setter
+public class MemberRequest {
 
 	@NotBlank
 	@Length(max=30)

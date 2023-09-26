@@ -1,11 +1,16 @@
 package bulletin.board.web.controller.member;
 
+import java.net.URI;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import bulletin.board.dto.MemberRequest;
+import bulletin.board.dto.MemberResponse;
 import bulletin.board.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,35 +23,22 @@ public class MemberController {
 
 	//Create
 	@PostMapping("")
-	public ResponseEntity createMember(@Valid MemberCreateDto memberCreateDto, BindingResult bindingResult) {
-		if (bindingResult.hasErrors() || validateMemberAddForm(memberCreateDto, bindingResult)) {
-			return "members/addMemberForm";
-		}
-		memberService.save(memberCreateDto.getLoginId(), memberCreateDto.getPassword(), memberCreateDto.getName());
-		return "redirect:/";
+	public ResponseEntity<Void> createMember(@RequestBody @Valid MemberRequest memberRequest) {
+		Long saveId = memberService.save(memberRequest);
+		return ResponseEntity.created(URI.create("/members/" + saveId)).build();
 	}
 
-	private boolean validateMemberAddForm(MemberCreateDto memberCreateDto, BindingResult bindingResult) {
-		if (isSamePassword(memberCreateDto.getPassword(), memberCreateDto.getPasswordRe())) {
-			bindingResult.rejectValue("passwordRe","reject" ,"비밀번호가 일치하지 않습니다.");
-		}
-
-		if (memberService.isDuplicatedLoginId(memberCreateDto.getLoginId())) {
-			bindingResult.rejectValue("loginId","duplicated" ,"중복된 아이디입니다.");
-		}
-
-		if (memberService.isDuplicatedName(memberCreateDto.getName())) {
-			bindingResult.rejectValue("name","duplicated" ,"중복된 이름입니다.");
-		}
-
-		if (bindingResult.hasErrors()) {
-			return true;
-		}
-
-		return false;
+	//Read
+	@GetMapping("/{id}")
+	public ResponseEntity<MemberResponse> findMember(@PathVariable("id") Long memberId) {
+		return ResponseEntity.ok().body(memberService.findMember(memberId));
 	}
 
-	private static boolean isSamePassword(String password, String passwordRe) {
-		return !password.equals(passwordRe);
-	}
+	//Update
+
+
+	//Delete
+
+
+
 }
