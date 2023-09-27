@@ -1,4 +1,4 @@
-package bulletin.board.api.error;
+package bulletin.board.core.common.exceptions;
 
 import lombok.Getter;
 

@@ -4,8 +4,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import bulletin.board.core.domain.Member;
-import bulletin.board.api.error.ErrorCode;
-import bulletin.board.core.exceptions.LoginFailException;
+import bulletin.board.core.common.exceptions.ErrorCode;
+import bulletin.board.core.common.exceptions.LoginFailException;
 import bulletin.board.core.repository.MemberRepository;
 import bulletin.board.core.dto.LoginRequest;
 import lombok.RequiredArgsConstructor;

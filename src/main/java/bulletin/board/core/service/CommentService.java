@@ -10,12 +10,12 @@ import bulletin.board.core.domain.Comment;
 import bulletin.board.core.domain.Member;
 import bulletin.board.core.domain.Post;
 import bulletin.board.core.dto.CommentResponse;
-import bulletin.board.core.exceptions.AuthorityException;
-import bulletin.board.core.exceptions.EmptyStringException;
-import bulletin.board.core.exceptions.EntityNotFoundException;
+import bulletin.board.core.common.exceptions.AuthorityException;
+import bulletin.board.core.common.exceptions.EmptyStringException;
+import bulletin.board.core.common.exceptions.EntityNotFoundException;
 import bulletin.board.core.repository.CommentRepository;
 import bulletin.board.core.repository.PostRepository;
-import bulletin.board.api.error.ErrorCode;
+import bulletin.board.core.common.exceptions.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -45,7 +45,7 @@ public class CommentService {
 	}
 
 	public Page<CommentResponse> findComments(Long postId, Member member, Pageable pageable) {
-		Page<Comment> comments = commentRepository.findByPostId(postId, pageable);
+		Page<Comment> comments = commentRepository.findWithMemberByPostId(postId, pageable);
 
 		return comments.map(comment -> CommentResponse.of(comment, member));
 	}

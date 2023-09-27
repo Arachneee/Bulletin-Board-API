@@ -5,7 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import bulletin.board.core.domain.Member;
-import bulletin.board.api.argumentresolver.Login;
+import bulletin.board.api.login.argumentresolver.Login;
 import lombok.RequiredArgsConstructor;
 
 @Controller

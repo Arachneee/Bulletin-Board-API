@@ -5,11 +5,11 @@ import bulletin.board.core.domain.Post;
 import bulletin.board.core.dto.PostRequest;
 import bulletin.board.core.dto.PostDetailResponse;
 import bulletin.board.core.dto.PostResponse;
-import bulletin.board.core.exceptions.AuthorityException;
-import bulletin.board.core.exceptions.EntityNotFoundException;
-import bulletin.board.core.exceptions.PostSearchCodeException;
+import bulletin.board.core.common.exceptions.AuthorityException;
+import bulletin.board.core.common.exceptions.EntityNotFoundException;
+import bulletin.board.core.common.exceptions.PostSearchCodeException;
 import bulletin.board.core.repository.PostRepository;
-import bulletin.board.api.error.ErrorCode;
+import bulletin.board.core.common.exceptions.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;

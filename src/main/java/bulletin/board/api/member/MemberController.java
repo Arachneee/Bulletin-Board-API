@@ -18,7 +18,7 @@ import bulletin.board.core.domain.Member;
 import bulletin.board.core.dto.MemberRequest;
 import bulletin.board.core.dto.MemberResponse;
 import bulletin.board.core.service.MemberService;
-import bulletin.board.api.session.SessionConst;
+import bulletin.board.api.login.session.SessionConst;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 

@@ -1,8 +1,8 @@
-package bulletin.board.api.interceptor;
+package bulletin.board.api.login.interceptor;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import bulletin.board.api.session.SessionConst;
+import bulletin.board.api.login.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;

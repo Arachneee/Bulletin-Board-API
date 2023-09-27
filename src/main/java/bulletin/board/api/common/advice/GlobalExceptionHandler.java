@@ -1,4 +1,4 @@
-package bulletin.board.api.error.advice;
+package bulletin.board.api.common.advice;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import bulletin.board.api.error.ErrorResponse;
-import bulletin.board.core.exceptions.BusinessException;
-import bulletin.board.api.error.ErrorCode;
+import bulletin.board.api.common.dto.ErrorResponse;
+import bulletin.board.core.common.exceptions.BusinessException;
+import bulletin.board.core.common.exceptions.ErrorCode;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

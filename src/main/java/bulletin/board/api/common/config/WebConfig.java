@@ -1,4 +1,4 @@
-package bulletin.board.api.config;
+package bulletin.board.api.common.config;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import bulletin.board.api.argumentresolver.LoginMemberArgumentResolver;
-import bulletin.board.api.interceptor.LoginCheckInterceptor;
+import bulletin.board.api.login.argumentresolver.LoginMemberArgumentResolver;
+import bulletin.board.api.login.interceptor.LoginCheckInterceptor;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {

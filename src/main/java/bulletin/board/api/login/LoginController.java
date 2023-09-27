@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import bulletin.board.core.domain.Member;
 import bulletin.board.core.dto.LoginRequest;
 import bulletin.board.core.service.LoginService;
-import bulletin.board.api.session.SessionConst;
+import bulletin.board.api.login.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;

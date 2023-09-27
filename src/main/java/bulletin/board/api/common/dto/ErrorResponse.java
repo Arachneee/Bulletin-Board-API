@@ -1,4 +1,4 @@
-package bulletin.board.api.error;
+package bulletin.board.api.common.dto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.validation.BindingResult;
 
+import bulletin.board.core.common.exceptions.ErrorCode;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

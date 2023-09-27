@@ -1,4 +1,4 @@
-package bulletin.board.api.argumentresolver;
+package bulletin.board.api.login.argumentresolver;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

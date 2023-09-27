@@ -23,7 +23,7 @@ import bulletin.board.core.dto.PostDetailResponse;
 import bulletin.board.core.dto.PostRequest;
 import bulletin.board.core.dto.PostResponse;
 import bulletin.board.core.service.PostService;
-import bulletin.board.api.session.SessionConst;
+import bulletin.board.api.login.session.SessionConst;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 

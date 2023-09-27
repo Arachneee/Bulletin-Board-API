@@ -2,12 +2,12 @@ package bulletin.board.core.service;
 
 import bulletin.board.core.dto.MemberRequest;
 import bulletin.board.core.dto.MemberResponse;
-import bulletin.board.core.exceptions.AuthorityException;
-import bulletin.board.core.exceptions.DuplicatedLoginIdException;
-import bulletin.board.core.exceptions.DuplicatedNameException;
-import bulletin.board.core.exceptions.EmptyStringException;
-import bulletin.board.core.exceptions.EntityNotFoundException;
-import bulletin.board.core.exceptions.PasswordMismatchException;
+import bulletin.board.core.common.exceptions.AuthorityException;
+import bulletin.board.core.common.exceptions.DuplicatedLoginIdException;
+import bulletin.board.core.common.exceptions.DuplicatedNameException;
+import bulletin.board.core.common.exceptions.EmptyStringException;
+import bulletin.board.core.common.exceptions.EntityNotFoundException;
+import bulletin.board.core.common.exceptions.PasswordMismatchException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +15,7 @@ import org.springframework.util.StringUtils;
 
 import bulletin.board.core.domain.Member;
 import bulletin.board.core.repository.MemberRepository;
-import bulletin.board.api.error.ErrorCode;
+import bulletin.board.core.common.exceptions.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
