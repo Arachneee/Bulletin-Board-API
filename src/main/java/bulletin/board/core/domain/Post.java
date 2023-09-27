@@ -5,6 +5,8 @@ import static jakarta.persistence.FetchType.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.BatchSize;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,10 +17,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post extends BaseEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,11 +43,10 @@ public class Post extends BaseEntity {
 
 	private Integer viewCount;
 
+	@BatchSize(size = 10)
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
 
-	protected Post() {
-	}
 	public static Post create(String title, String content, Member member) {
 		Post post = new Post();
 

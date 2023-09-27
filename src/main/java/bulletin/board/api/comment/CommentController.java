@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import bulletin.board.api.session.SessionConst;
 import bulletin.board.core.domain.Member;
 import bulletin.board.core.dto.CommentResponse;
 import bulletin.board.core.service.CommentService;
-import bulletin.board.api.session.SessionConst;
 import lombok.RequiredArgsConstructor;
 
 @RestController

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.hibernate.annotations.BatchSize;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,10 +18,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,8 +46,6 @@ public class Comment extends BaseEntity {
 	@OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
 	private List<CommentEmpathy> commentEmpathies = new ArrayList<>();
 
-	protected Comment() {
-	}
 
 	public static Comment create(String content, Post post, Member member) {
 		Comment comment = new Comment();

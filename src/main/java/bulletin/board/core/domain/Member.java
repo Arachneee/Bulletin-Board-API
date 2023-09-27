@@ -6,10 +6,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +28,6 @@ public class Member extends BaseEntity {
 	@Column(nullable = false, length = 30)
 	private String name;
 
-	protected Member() {
-	}
 
 	public static Member create(String loginId, String password, String name) {
 		Member member = new Member();

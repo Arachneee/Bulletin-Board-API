@@ -16,19 +16,29 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TestDataInit {
 
-	private final MemberRepository memberRepository;
-	private final PostRepository postRepository;
-	private final CommentRepository commentRepository;
+	private final InitService initService;
 
 	@PostConstruct
-	@Transactional
 	public void init() {
-		// Member member = memberRepository.findById(1L).get();
-		// Post post = postRepository.findById(1L).get();
-		//
-		// for (int i = 1; i <= 100; i++) {
-		// 	Comment comment = Comment.create("댓글test" + i, post, member);
-		// 	commentRepository.save(comment);
-		// }
+		initService.dbInit1();
+	}
+
+	@Component
+	@Transactional
+	@RequiredArgsConstructor
+	static class InitService {
+
+		private final MemberRepository memberRepository;
+		private final PostRepository postRepository;
+		private final CommentRepository commentRepository;
+		public void dbInit1() {
+			Member member = memberRepository.findById(2L).get();
+			Post post = postRepository.findById(1L).get();
+
+			for (int i = 10; i <= 39; i++) {
+				Comment comment = Comment.create("댓글test" + i, post, member);
+				commentRepository.save(comment);
+			}
+		}
 	}
 }

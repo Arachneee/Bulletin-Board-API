@@ -9,10 +9,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentEmpathy extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +30,6 @@ public class CommentEmpathy extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    protected CommentEmpathy() {
-    }
 
     public static CommentEmpathy create(Comment comment, Member member) {
         CommentEmpathy commentEmpathy = new CommentEmpathy();

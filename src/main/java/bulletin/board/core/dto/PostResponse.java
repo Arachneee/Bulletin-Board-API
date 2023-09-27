@@ -4,10 +4,12 @@ import java.time.LocalDateTime;
 
 import bulletin.board.core.domain.Post;
 import lombok.AccessLevel;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostResponse {
 
