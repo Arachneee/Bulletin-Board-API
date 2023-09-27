@@ -11,8 +11,8 @@ public enum ErrorCode {
 	MEMBER_NOT_FOUND(400, "ME_004", "존재하지 않는 회원입니다."),
 	INVALID_INPUT(400, "I_001", "적절하지 않은 입력입니다."),
 	BAD_LOGIN(400, "AU_002", "잘못된 아이디 또는 패스워드입니다."),
-	INVALID_AUTHORITY(400, "AU_001", "접근 권한이 없습니다.");
-
+	INVALID_AUTHORITY(400, "AU_001", "접근 권한이 없습니다."),
+	POST_NOT_FOUND(400, "P_001", "존재하지 않는 게시글입니다.");
 
 	private final String code;
 	private final String message;
