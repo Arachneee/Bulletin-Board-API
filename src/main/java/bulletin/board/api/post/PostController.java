@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import bulletin.board.api.login.argumentresolver.Login;
 import bulletin.board.core.domain.Member;
 import bulletin.board.core.dto.PostDetailResponse;
 import bulletin.board.core.dto.PostRequest;
@@ -35,7 +36,7 @@ public class PostController {
 	private final PostService postService;
 
 	@PostMapping("")
-	public ResponseEntity<Void> createPost(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+	public ResponseEntity<Void> createPost(@Login Member member,
 											@RequestBody @Valid PostRequest postRequest) {
 		Long postId = postService.save(member, postRequest);
 		return ResponseEntity.created(URI.create("/posts/" + postId)).build();
@@ -49,13 +50,13 @@ public class PostController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<PostDetailResponse> findPost(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+	public ResponseEntity<PostDetailResponse> findPost(@Login Member member,
 														@PathVariable Long id) {
 		return ResponseEntity.ok().body(postService.findPost(member, id));
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<Void> updatePost(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+	public ResponseEntity<Void> updatePost(@Login Member member,
 											@PathVariable("id") Long id,
 											@RequestBody @Valid PostRequest postRequest) {
 		postService.updatePost(member, id, postRequest);
@@ -64,7 +65,7 @@ public class PostController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deletePost(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+	public ResponseEntity<Void> deletePost(@Login Member member,
 											@PathVariable("id") Long id) {
 		postService.delete(member, id);
 

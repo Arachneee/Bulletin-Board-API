@@ -12,13 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
+import bulletin.board.api.login.argumentresolver.Login;
 import bulletin.board.core.domain.Member;
 import bulletin.board.core.dto.MemberRequest;
 import bulletin.board.core.dto.MemberResponse;
 import bulletin.board.core.service.MemberService;
-import bulletin.board.api.login.session.SessionConst;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -40,7 +39,7 @@ public class MemberController {
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<Void> updateName(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+	public ResponseEntity<Void> updateName(@Login Member member,
 										@PathVariable("id") Long id,
 										@RequestBody Map<String, String> nameMap) {
 		memberService.updateName(member, id, nameMap.get("name"));
@@ -48,7 +47,7 @@ public class MemberController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteMember(@SessionAttribute(name = SessionConst.LOGIN_MEMBER) Member member,
+	public ResponseEntity<Void> deleteMember(@Login Member member,
 										@PathVariable("id") Long id) {
 		memberService.delete(member, id);
 		return ResponseEntity.noContent().build();

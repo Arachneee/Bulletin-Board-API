@@ -36,7 +36,7 @@ public class PostService {
 		Post findPost = postRepository.findById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.POST_NOT_FOUND));
 
-		validatePostAuthority(member, findPost);
+		// validatePostAuthority(member, findPost);
 
 		findPost.update(postRequest.getTitle(), postRequest.getContent());
 	}

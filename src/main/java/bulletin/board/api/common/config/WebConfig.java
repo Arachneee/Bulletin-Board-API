@@ -8,17 +8,24 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import bulletin.board.api.login.argumentresolver.LoginMemberArgumentResolver;
-import bulletin.board.api.login.interceptor.LoginCheckInterceptor;
+import bulletin.board.api.login.interceptor.AuthorityInterceptor;
+import bulletin.board.core.repository.CommentRepository;
+import bulletin.board.core.repository.PostRepository;
+import lombok.RequiredArgsConstructor;
 
 @Configuration
+@RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
+
+    private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginCheckInterceptor())
+        registry.addInterceptor(new AuthorityInterceptor(postRepository, commentRepository))
                 .addPathPatterns("/**")
-                .excludePathPatterns("/", "/members", "/login",
-                        "/css/**", "/*.ico", "/error"
-                );
+                .excludePathPatterns("/", "/members", "/login", "/css/**", "/*.ico", "/error/**");
+
     }
 
     @Override

@@ -1,7 +1,13 @@
 package bulletin.board.core.common.exceptions;
 
-public class AuthorityException extends BusinessException {
+import lombok.Getter;
+
+@Getter
+public class AuthorityException extends RuntimeException {
+	private final ErrorCode errorCode;
+
 	public AuthorityException(ErrorCode errorCode) {
-		super(errorCode);
+		super(errorCode.getMessage());
+		this.errorCode = errorCode;
 	}
 }
