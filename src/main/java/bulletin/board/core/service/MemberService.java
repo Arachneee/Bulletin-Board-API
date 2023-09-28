@@ -41,7 +41,6 @@ public class MemberService {
 
 	@Transactional
 	public void updateName(Member member, Long id, String newName) {
-		validateAuthority(member, id);
 		validateEmptyString(newName);
 
 		Member findmember = memberRepository.findById(id)
@@ -52,19 +51,12 @@ public class MemberService {
 
 	@Transactional
 	public void delete(Member member, Long id) {
-		validateAuthority(member, id);
 		memberRepository.deleteById(id);
 	}
 
 	private void validateEmptyString(String newName) {
 		if (!StringUtils.hasText(newName)) {
 			throw new EmptyStringException(ErrorCode.INVALID_INPUT);
-		}
-	}
-
-	private void validateAuthority(Member member, Long id) {
-		if (!member.getId().equals(id)) {
-			throw new AuthorityException(ErrorCode.INVALID_AUTHORITY);
 		}
 	}
 

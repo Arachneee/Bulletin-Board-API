@@ -36,8 +36,6 @@ public class PostService {
 		Post findPost = postRepository.findById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.POST_NOT_FOUND));
 
-		// validatePostAuthority(member, findPost);
-
 		findPost.update(postRequest.getTitle(), postRequest.getContent());
 	}
 
@@ -52,17 +50,12 @@ public class PostService {
 	}
 
 	public Page<PostResponse> findPosts(String searchCode, String searchString, Pageable pageable) {
-		Page<Post> posts = null;
-
-		if (searchCode.equals("TITLE")) {
-			posts = postRepository.findByTitleContains(searchString, pageable);
-		} else if (searchCode.equals("CONTENT")) {
-			posts = postRepository.findByContentContains(searchString, pageable);
-		} else if (searchCode.equals("NAME")) {
-			posts = postRepository.findByNameContains(searchString, pageable);
-		} else {
-			throw new PostSearchCodeException(ErrorCode.INVALID_INPUT);
-		}
+		Page<Post> posts = switch (searchCode) {
+			case "TITLE" -> postRepository.findByTitleContains(searchString, pageable);
+			case "CONTENT" -> postRepository.findByContentContains(searchString, pageable);
+			case "NAME" -> postRepository.findByNameContains(searchString, pageable);
+			default -> throw new PostSearchCodeException(ErrorCode.INVALID_INPUT);
+		};
 
 		return posts.map(PostResponse::of);
 	}
@@ -72,16 +65,7 @@ public class PostService {
 		Post findPost = postRepository.findById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.POST_NOT_FOUND));
 
-		validatePostAuthority(member, findPost);
-
 		postRepository.delete(findPost);
 	}
-
-	private void validatePostAuthority(Member member, Post findPost) {
-		if (!findPost.getMember().getId().equals(member.getId())) {
-			throw new AuthorityException(ErrorCode.INVALID_AUTHORITY);
-		}
-	}
-
 
 }

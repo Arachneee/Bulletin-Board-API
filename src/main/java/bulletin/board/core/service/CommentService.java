@@ -55,24 +55,15 @@ public class CommentService {
 		Comment findComment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.COMMENT_NOT_FOUND));
 
-		validateCommentAuthority(member, findComment);
 		validateString(commentContent);
 
 		findComment.update(commentContent);
-	}
-
-	private void validateCommentAuthority(Member member, Comment comment) {
-		if (!comment.getMember().getId().equals(member.getId())) {
-			throw new AuthorityException(ErrorCode.INVALID_AUTHORITY);
-		}
 	}
 
 	@Transactional
 	public void delete(Member member, Long commentId) {
 		Comment findComment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.COMMENT_NOT_FOUND));
-
-		validateCommentAuthority(member, findComment);
 
 		commentRepository.delete(findComment);
 	}
