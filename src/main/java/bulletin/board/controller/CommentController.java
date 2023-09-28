@@ -34,16 +34,28 @@ public class CommentController {
 	public ResponseEntity<Void> createComment(@Login Member member,
 												@PathVariable Long postId,
 												@RequestBody Map<String, String> commentContentMap) {
-		Long commentId = commentService.save(member, postId, commentContentMap.get("commentContent"));
+		Long commentId = commentService.createComment(member, postId, commentContentMap.get("commentContent"));
 
-		return ResponseEntity.created(URI.create("/posts/" + postId + "/comments" + commentId)).build();
+		return ResponseEntity.created(URI.create("/posts/" + postId + "/comments/" + commentId)).build();
 	}
 
 	@GetMapping("")
-	public ResponseEntity<Page<CommentResponse>> findComments(@Login Member member,
-																@PathVariable Long postId,
-																@PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
+	public ResponseEntity<Page<CommentResponse>> findComments(
+						@Login Member member,
+						@PathVariable Long postId,
+						@PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
+
 		return ResponseEntity.ok().body(commentService.findComments(postId, member, pageable));
+	}
+
+	@GetMapping("/top")
+	public ResponseEntity<CommentResponse> findBestComment(@Login Member member, @PathVariable Long postId) {
+		return ResponseEntity.ok().body(commentService.findBestComment(member, postId));
+	}
+
+	@GetMapping("/{commentId}")
+	public ResponseEntity<CommentResponse> findComment(@Login Member member, @PathVariable Long commentId) {
+		return ResponseEntity.ok().body(commentService.findComment(member, commentId));
 	}
 
 	@PatchMapping("/{commentId}")
@@ -56,10 +68,12 @@ public class CommentController {
 
 	@DeleteMapping("/{commentId}")
 	public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
-		commentService.delete(commentId);
+		commentService.deleteComment(commentId);
 
 		return ResponseEntity.noContent().build();
 	}
+
+
 
 
 }

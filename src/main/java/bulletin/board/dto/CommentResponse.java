@@ -38,6 +38,6 @@ public class CommentResponse {
 			comment.getCreatedDate(),
 			comment.getEmpathyCount(),
 			comment.isWriter(member),
-			comment.isAlreadyEmpathized(member) || comment.isWriter(member));
+			!(comment.isAlreadyEmpathized(member) || comment.isWriter(member)));
 	}
 }

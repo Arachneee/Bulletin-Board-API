@@ -25,7 +25,7 @@ public class MemberService {
 	private final MemberRepository memberRepository;
 
 	@Transactional
-	public Long save(MemberRequest memberRequest) {
+	public Long createMember(MemberRequest memberRequest) {
 		validateMemberRequest(memberRequest);
 		Member savedMember = memberRepository.save(Member.create(memberRequest.getLoginId(), memberRequest.getPassword(), memberRequest.getName()));
 		return savedMember.getId();
@@ -49,7 +49,7 @@ public class MemberService {
 	}
 
 	@Transactional
-	public void delete(Long id) {
+	public void deleteMember(Long id) {
 		memberRepository.deleteById(id);
 	}
 

@@ -27,7 +27,7 @@ public class MemberController {
 
 	@PostMapping("")
 	public ResponseEntity<Void> createMember(@RequestBody @Valid MemberRequest memberRequest) {
-		Long saveId = memberService.save(memberRequest);
+		Long saveId = memberService.createMember(memberRequest);
 
 		return ResponseEntity.created(URI.create("/members/" + saveId)).build();
 	}
@@ -38,8 +38,7 @@ public class MemberController {
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<Void> updateName(@PathVariable("id") Long id,
-											@RequestBody Map<String, String> nameMap) {
+	public ResponseEntity<Void> updateName(@PathVariable("id") Long id, @RequestBody Map<String, String> nameMap) {
 		memberService.updateName(id, nameMap.get("name"));
 
 		return ResponseEntity.ok().build();
@@ -47,7 +46,7 @@ public class MemberController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteMember(@PathVariable("id") Long id) {
-		memberService.delete(id);
+		memberService.deleteMember(id);
 
 		return ResponseEntity.noContent().build();
 	}

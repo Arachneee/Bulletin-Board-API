@@ -34,29 +34,28 @@ public class PostController {
 	private final PostService postService;
 
 	@PostMapping("")
-	public ResponseEntity<Void> createPost(@Login Member member,
-											@RequestBody @Valid PostRequest postRequest) {
-		Long postId = postService.save(member, postRequest);
+	public ResponseEntity<Void> createPost(@Login Member member, @RequestBody @Valid PostRequest postRequest) {
+		Long postId = postService.createPost(member, postRequest);
 
 		return ResponseEntity.created(URI.create("/posts/" + postId)).build();
 	}
 
 	@GetMapping("")
-	public ResponseEntity<Page<PostResponse>> findPosts(@RequestParam(value = "searchCode", defaultValue = "TITLE") String searchCode,
-															@RequestParam(value = "searchString", defaultValue = "") String searchString,
-															@PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
+	public ResponseEntity<Page<PostResponse>> findPosts(
+		@RequestParam(value = "searchCode", defaultValue = "TITLE") String searchCode,
+		@RequestParam(value = "searchString", defaultValue = "") String searchString,
+		@PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
+
 		return ResponseEntity.ok().body(postService.findPosts(searchCode, searchString, pageable));
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<PostDetailResponse> findPost(@Login Member member,
-														@PathVariable Long id) {
+	public ResponseEntity<PostDetailResponse> findPost(@Login Member member, @PathVariable Long id) {
 		return ResponseEntity.ok().body(postService.findPost(member, id));
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<Void> updatePost(@PathVariable("id") Long id,
-											@RequestBody @Valid PostRequest postRequest) {
+	public ResponseEntity<Void> updatePost(@PathVariable("id") Long id, @RequestBody @Valid PostRequest postRequest) {
 		postService.updatePost(id, postRequest);
 
 		return ResponseEntity.ok().build();
@@ -64,7 +63,7 @@ public class PostController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deletePost(@PathVariable("id") Long id) {
-		postService.delete(id);
+		postService.deletePost(id);
 
 		return ResponseEntity.noContent().build();
 	}

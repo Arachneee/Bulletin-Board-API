@@ -25,7 +25,7 @@ public class PostService {
 	private final PostRepository postRepository;
 
 	@Transactional
-	public Long save(Member member, PostRequest postRequest) {
+	public Long createPost(Member member, PostRequest postRequest) {
 		Post savedPost = postRepository.save(Post.create(postRequest.getTitle(), postRequest.getContent(), member));
 		return savedPost.getId();
 	}
@@ -60,7 +60,7 @@ public class PostService {
 	}
 
 	@Transactional
-	public void delete(Long postId) {
+	public void deletePost(Long postId) {
 		Post findPost = postRepository.findById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.POST_NOT_FOUND));
 

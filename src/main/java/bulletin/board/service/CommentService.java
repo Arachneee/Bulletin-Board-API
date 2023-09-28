@@ -26,7 +26,7 @@ public class CommentService {
 	private final PostRepository postRepository;
 
 	@Transactional
-	public Long save(Member member, Long postId, String commentContent) {
+	public Long createComment(Member member, Long postId, String commentContent) {
 		Post findPost = postRepository.findById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.POST_NOT_FOUND));
 
@@ -49,6 +49,20 @@ public class CommentService {
 		return comments.map(comment -> CommentResponse.of(comment, member));
 	}
 
+	public CommentResponse findComment(Member member, Long commentId) {
+		Comment findComment = commentRepository.findWithMemberAndEmpathyById(commentId)
+			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.COMMENT_NOT_FOUND));
+
+		return CommentResponse.of(findComment, member);
+	}
+
+	public CommentResponse findBestComment(Member member, Long postId) {
+		Comment findComment = commentRepository.findTop1WithMemberAndEmpathyByPostId(postId)
+			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.COMMENT_NOT_FOUND));
+
+		return CommentResponse.of(findComment, member);
+	}
+
 	@Transactional
 	public void updateComment(Long commentId, String commentContent) {
 		Comment findComment = commentRepository.findById(commentId)
@@ -60,10 +74,12 @@ public class CommentService {
 	}
 
 	@Transactional
-	public void delete(Long commentId) {
+	public void deleteComment(Long commentId) {
 		Comment findComment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.COMMENT_NOT_FOUND));
 
 		commentRepository.delete(findComment);
 	}
+
+
 }
