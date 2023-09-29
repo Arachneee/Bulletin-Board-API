@@ -11,15 +11,16 @@ import bulletin.board.repository.PostRepository;
 import bulletin.board.exceptions.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class PostService {
 
 	private final PostRepository postRepository;
@@ -32,10 +33,13 @@ public class PostService {
 
 	@Transactional
 	public void updatePost(Long postId, PostRequest postRequest) {
+		log.info("before find post");
 		Post findPost = postRepository.findById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.POST_NOT_FOUND));
+		log.info("after find post");
 
 		findPost.update(postRequest.getTitle(), postRequest.getContent());
+		log.info("after update post");
 	}
 
 	@Transactional
@@ -48,6 +52,7 @@ public class PostService {
 		return PostDetailResponse.of(post, member);
 	}
 
+	@Transactional(readOnly = true)
 	public Page<PostResponse> findPosts(String searchCode, String searchString, Pageable pageable) {
 		Page<Post> posts = switch (searchCode) {
 			case "TITLE" -> postRepository.findByTitleContains(searchString, pageable);
@@ -61,7 +66,7 @@ public class PostService {
 
 	@Transactional
 	public void deletePost(Long postId) {
-		Post findPost = postRepository.findById(postId)
+		Post findPost = postRepository.findWithCommentsById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.POST_NOT_FOUND));
 
 		postRepository.delete(findPost);

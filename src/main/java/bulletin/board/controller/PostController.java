@@ -34,7 +34,7 @@ public class PostController {
 	private final PostService postService;
 
 	@PostMapping("")
-	public ResponseEntity<Void> createPost(@Login Member member, @RequestBody @Valid PostRequest postRequest) {
+	public ResponseEntity<Void> createPost(@Login Member member, @Valid @RequestBody PostRequest postRequest) {
 		Long postId = postService.createPost(member, postRequest);
 
 		return ResponseEntity.created(URI.create("/posts/" + postId)).build();
@@ -44,7 +44,7 @@ public class PostController {
 	public ResponseEntity<Page<PostResponse>> findPosts(
 		@RequestParam(value = "searchCode", defaultValue = "TITLE") String searchCode,
 		@RequestParam(value = "searchString", defaultValue = "") String searchString,
-		@PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
+		@Valid @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
 
 		return ResponseEntity.ok().body(postService.findPosts(searchCode, searchString, pageable));
 	}
@@ -55,7 +55,7 @@ public class PostController {
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<Void> updatePost(@PathVariable("id") Long id, @RequestBody @Valid PostRequest postRequest) {
+	public ResponseEntity<Void> updatePost(@PathVariable("id") Long id, @Valid @RequestBody PostRequest postRequest) {
 		postService.updatePost(id, postRequest);
 
 		return ResponseEntity.ok().build();

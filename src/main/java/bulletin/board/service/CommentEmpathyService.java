@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class CommentEmpathyService {
 
 	private final CommentEmpathyRepository commentEmpathyRepository;
@@ -35,12 +34,12 @@ public class CommentEmpathyService {
 		return commentEmpathy.getId();
 	}
 
-	private static void validateEmpathy(Member member, Comment findComment) {
-		if (findComment.isAlreadyEmpathized(member)) {
+	private void validateEmpathy(Member member, Comment comment) {
+		if (comment.isAlreadyEmpathized(member)) {
 			throw new DuplicatedCommentEmpathyException(ErrorCode.DUPLICATED_EMPATHY);
 		}
 
-		if (findComment.isWriter(member)) {
+		if (comment.isWriter(member)) {
 			throw new SelfEmpathyException(ErrorCode.SELF_EMPATHY);
 		}
 	}

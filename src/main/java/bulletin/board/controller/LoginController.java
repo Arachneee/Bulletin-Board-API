@@ -28,7 +28,7 @@ public class LoginController {
 	private final LoginService loginService;
 
 	@PostMapping("")
-	public ResponseEntity<Map<String,String>> login(@RequestBody @Valid LoginRequest loginRequest,
+	public ResponseEntity<Map<String,String>> login(@Valid @RequestBody LoginRequest loginRequest,
 						@RequestParam(defaultValue = "/") String redirectURL,
 						HttpServletRequest request) {
 		Member member = loginService.login(loginRequest);

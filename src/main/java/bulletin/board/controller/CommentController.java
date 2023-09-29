@@ -3,6 +3,8 @@ package bulletin.board.controller;
 import java.net.URI;
 import java.util.Map;
 
+import bulletin.board.dto.CommentRequest;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -33,8 +35,8 @@ public class CommentController {
 	@PostMapping("")
 	public ResponseEntity<Void> createComment(@Login Member member,
 												@PathVariable Long postId,
-												@RequestBody Map<String, String> commentContentMap) {
-		Long commentId = commentService.createComment(member, postId, commentContentMap.get("commentContent"));
+												@Valid @RequestBody CommentRequest commentRequest) {
+		Long commentId = commentService.createComment(member, postId, commentRequest);
 
 		return ResponseEntity.created(URI.create("/posts/" + postId + "/comments/" + commentId)).build();
 	}
@@ -60,8 +62,8 @@ public class CommentController {
 
 	@PatchMapping("/{commentId}")
 	public ResponseEntity<Void> updateComment(@PathVariable Long commentId,
-												@RequestBody Map<String, String> commentContentMap) {
-		commentService.updateComment(commentId, commentContentMap.get("commentContent"));
+											  @Valid @RequestBody CommentRequest commentRequest) {
+		commentService.updateComment(commentId, commentRequest);
 
 		return ResponseEntity.ok().build();
 	}

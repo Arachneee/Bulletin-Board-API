@@ -12,11 +12,11 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class LoginService {
 
 	private final MemberRepository memberRepository;
 
+	@Transactional(readOnly = true)
 	public Member login(LoginRequest loginRequest) {
 		String loginId = loginRequest.getLoginId();
 		String password = loginRequest.getPassword();

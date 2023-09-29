@@ -3,6 +3,7 @@ package bulletin.board.controller;
 import java.net.URI;
 import java.util.Map;
 
+import bulletin.board.dto.MemberNameRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,7 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@PostMapping("")
-	public ResponseEntity<Void> createMember(@RequestBody @Valid MemberRequest memberRequest) {
+	public ResponseEntity<Void> createMember(@Valid @RequestBody MemberRequest memberRequest) {
 		Long saveId = memberService.createMember(memberRequest);
 
 		return ResponseEntity.created(URI.create("/members/" + saveId)).build();
@@ -38,8 +39,8 @@ public class MemberController {
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<Void> updateName(@PathVariable("id") Long id, @RequestBody Map<String, String> nameMap) {
-		memberService.updateName(id, nameMap.get("name"));
+	public ResponseEntity<Void> updateName(@PathVariable("id") Long id, @Valid @RequestBody MemberNameRequest memberNameRequest) {
+		memberService.updateName(id, memberNameRequest);
 
 		return ResponseEntity.ok().build();
 	}

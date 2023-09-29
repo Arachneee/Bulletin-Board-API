@@ -1,5 +1,6 @@
 package bulletin.board.service;
 
+import bulletin.board.dto.MemberNameRequest;
 import bulletin.board.dto.MemberRequest;
 import bulletin.board.dto.MemberResponse;
 import bulletin.board.exceptions.DuplicatedLoginIdException;
@@ -10,7 +11,6 @@ import bulletin.board.exceptions.PasswordMismatchException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import bulletin.board.domain.Member;
 import bulletin.board.repository.MemberRepository;
@@ -19,18 +19,38 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-@Transactional(readOnly = true)
 public class MemberService {
 
 	private final MemberRepository memberRepository;
 
-	@Transactional
+
 	public Long createMember(MemberRequest memberRequest) {
 		validateMemberRequest(memberRequest);
-		Member savedMember = memberRepository.save(Member.create(memberRequest.getLoginId(), memberRequest.getPassword(), memberRequest.getName()));
+		Member savedMember = saveMember(memberRequest);
+
 		return savedMember.getId();
 	}
 
+	private void validateMemberRequest(MemberRequest memberRequest) {
+		if (!memberRequest.getPassword().equals(memberRequest.getPasswordRe())) {
+			throw new PasswordMismatchException(ErrorCode.PASSWORD_NOT_SAME);
+		}
+
+		if (memberRepository.existsByLoginId(memberRequest.getLoginId())) {
+			throw new DuplicatedLoginIdException(ErrorCode.DUPLICATED_LOGIN_ID);
+		}
+
+		if (memberRepository.existsByName(memberRequest.getName())) {
+			throw new DuplicatedNameException(ErrorCode.DUPLICATED_NAME);
+		}
+	}
+
+	@Transactional
+	private Member saveMember(MemberRequest memberRequest) {
+		return memberRepository.save(Member.create(memberRequest.getLoginId(), memberRequest.getPassword(), memberRequest.getName()));
+	}
+
+	@Transactional(readOnly = true)
 	public MemberResponse findMember(Long id) {
 		Member member = memberRepository.findById(id)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
@@ -39,38 +59,16 @@ public class MemberService {
 	}
 
 	@Transactional
-	public void updateName(Long id, String newName) {
-		validateEmptyString(newName);
-
+	public void updateName(Long id, MemberNameRequest memberNameRequest) {
 		Member findmember = memberRepository.findById(id)
-			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+				.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
-		findmember.changeName(newName);
+		findmember.changeName(memberNameRequest.getName());
 	}
 
 	@Transactional
 	public void deleteMember(Long id) {
 		memberRepository.deleteById(id);
-	}
-
-	private void validateEmptyString(String newName) {
-		if (!StringUtils.hasText(newName)) {
-			throw new EmptyStringException(ErrorCode.INVALID_INPUT);
-		}
-	}
-
-	private void validateMemberRequest(MemberRequest memberRequest) {
-		if (!memberRequest.getPassword().equals(memberRequest.getPasswordRe())) {
-			throw new PasswordMismatchException(ErrorCode.PASSWORD_NOT_SAME);
-		}
-
-		if (memberRepository.findByLoginId(memberRequest.getLoginId()).isPresent()) {
-			throw new DuplicatedLoginIdException(ErrorCode.DUPLICATED_LOGIN_ID);
-		}
-
-		if (memberRepository.findByName(memberRequest.getName()).isPresent()) {
-			throw new DuplicatedNameException(ErrorCode.DUPLICATED_NAME);
-		}
 	}
 
 }
