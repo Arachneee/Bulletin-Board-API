@@ -13,7 +13,7 @@ import bulletin.board.dto.CommentResponse;
 import bulletin.board.exceptions.EntityNotFoundException;
 import bulletin.board.repository.CommentRepository;
 import bulletin.board.repository.PostRepository;
-import bulletin.board.exceptions.ErrorCode;
+import bulletin.board.constant.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @Service

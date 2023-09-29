@@ -23,4 +23,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
 	@EntityGraph(attributePaths = {"member", "commentEmpathies"})
 	Optional<Comment> findTop1WithMemberAndEmpathyByPostId(Long postId);
+
+	Boolean existsByIdAndMember(Long id, Member member);
 }

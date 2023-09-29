@@ -1,5 +1,6 @@
 package bulletin.board.exceptions;
 
+import bulletin.board.constant.ErrorCode;
 import lombok.Getter;
 
 @Getter

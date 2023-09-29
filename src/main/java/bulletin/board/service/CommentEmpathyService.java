@@ -8,7 +8,7 @@ import bulletin.board.domain.CommentEmpathy;
 import bulletin.board.domain.Member;
 import bulletin.board.exceptions.DuplicatedCommentEmpathyException;
 import bulletin.board.exceptions.EntityNotFoundException;
-import bulletin.board.exceptions.ErrorCode;
+import bulletin.board.constant.ErrorCode;
 import bulletin.board.exceptions.SelfEmpathyException;
 import bulletin.board.repository.CommentEmpathyRepository;
 import bulletin.board.repository.CommentRepository;

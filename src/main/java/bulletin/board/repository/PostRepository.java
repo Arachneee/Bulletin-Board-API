@@ -3,6 +3,7 @@ package bulletin.board.repository;
 
 import java.util.Optional;
 
+import bulletin.board.domain.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -29,4 +30,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
 	@EntityGraph(attributePaths = {"comments"})
 	Optional<Post> findWithCommentsById(Long id);
+
+	Boolean existsByIdAndMember(Long id, Member member);
 }

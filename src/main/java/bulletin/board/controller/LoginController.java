@@ -1,8 +1,12 @@
 package bulletin.board.controller;
 
 
+import java.net.URI;
 import java.util.Map;
 
+import bulletin.board.dto.LoginResponse;
+import bulletin.board.dto.MemberResponse;
+import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,15 +32,13 @@ public class LoginController {
 	private final LoginService loginService;
 
 	@PostMapping("")
-	public ResponseEntity<Map<String,String>> login(@Valid @RequestBody LoginRequest loginRequest,
-						@RequestParam(defaultValue = "/") String redirectURL,
-						HttpServletRequest request) {
-		Member member = loginService.login(loginRequest);
+	public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest,
+											   HttpServletRequest request) {
+		Member loginMember = loginService.login(loginRequest);
 
-		request.getSession()
-				.setAttribute(SessionConst.LOGIN_MEMBER, member);
+		request.getSession().setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
 
-		return ResponseEntity.ok().body(Map.of("redirectURL", redirectURL));
+		return ResponseEntity.ok().body(LoginResponse.login(loginMember));
 	}
 
 	@DeleteMapping("")

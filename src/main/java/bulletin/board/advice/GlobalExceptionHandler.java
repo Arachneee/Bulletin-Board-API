@@ -15,7 +15,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import bulletin.board.dto.ErrorResponse;
 import bulletin.board.exceptions.AuthorityException;
 import bulletin.board.exceptions.BusinessException;
-import bulletin.board.exceptions.ErrorCode;
+import bulletin.board.constant.ErrorCode;
 import bulletin.board.exceptions.LoginFailException;
 
 @RestControllerAdvice

@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.validation.BindingResult;
 
-import bulletin.board.exceptions.ErrorCode;
+import bulletin.board.constant.ErrorCode;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

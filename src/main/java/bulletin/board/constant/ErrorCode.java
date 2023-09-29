@@ -1,4 +1,4 @@
-package bulletin.board.exceptions;
+package bulletin.board.constant;
 
 import lombok.Getter;
 

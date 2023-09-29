@@ -2,6 +2,7 @@ package bulletin.board.controller;
 
 import java.net.URI;
 
+import bulletin.board.dto.PostSearchRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import bulletin.board.argumentresolver.Login;
@@ -42,11 +42,10 @@ public class PostController {
 
 	@GetMapping("")
 	public ResponseEntity<Page<PostResponse>> findPosts(
-		@RequestParam(value = "searchCode", defaultValue = "TITLE") String searchCode,
-		@RequestParam(value = "searchString", defaultValue = "") String searchString,
+		@Valid PostSearchRequest postSearchRequest,
 		@Valid @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
 
-		return ResponseEntity.ok().body(postService.findPosts(searchCode, searchString, pageable));
+		return ResponseEntity.ok().body(postService.findPosts(postSearchRequest, pageable));
 	}
 
 	@GetMapping("/{id}")

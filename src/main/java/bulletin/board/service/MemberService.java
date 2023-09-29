@@ -5,7 +5,6 @@ import bulletin.board.dto.MemberRequest;
 import bulletin.board.dto.MemberResponse;
 import bulletin.board.exceptions.DuplicatedLoginIdException;
 import bulletin.board.exceptions.DuplicatedNameException;
-import bulletin.board.exceptions.EmptyStringException;
 import bulletin.board.exceptions.EntityNotFoundException;
 import bulletin.board.exceptions.PasswordMismatchException;
 
@@ -14,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import bulletin.board.domain.Member;
 import bulletin.board.repository.MemberRepository;
-import bulletin.board.exceptions.ErrorCode;
+import bulletin.board.constant.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

@@ -3,9 +3,7 @@ package bulletin.board.interceptor;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import bulletin.board.session.SessionConst;
-import bulletin.board.domain.Comment;
 import bulletin.board.domain.Member;
-import bulletin.board.domain.Post;
 import bulletin.board.repository.CommentRepository;
 import bulletin.board.repository.PostRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -51,26 +49,25 @@ public class AuthorityInterceptor implements HandlerInterceptor {
 
     private boolean isNotAuthorityMember(String requestURI, Member loginMember) {
         String[] urlSplit = requestURI.split("/");
-        Long loginMemberId = loginMember.getId();
 
         // 회원 Update, Delete
         if (requestURI.matches("^/members/[0-9]+$")) {
             Long memberId = Long.valueOf(urlSplit[2]);
-            return !loginMemberId.equals(memberId);
+            return !loginMember.getId().equals(memberId);
         }
 
         // 게시글 Update, Delete
         if (requestURI.matches("^/posts/[0-9]+$")) {
             Long postId = Long.valueOf(urlSplit[2]);
-            Post post = postRepository.findById(postId).orElse(null);
-            return post == null || !post.getMember().getId().equals(loginMemberId);
+
+            return !postRepository.existsByIdAndMember(postId, loginMember);
         }
 
         // 댓글 Update, Delete
         if (requestURI.matches("^/posts/[0-9]+/comments/[0-9]+$")) {
             Long commentsId = Long.valueOf(urlSplit[4]);
-            Comment comment = commentRepository.findById(commentsId).orElse(null);
-            return comment == null || !comment.getMember().getId().equals(loginMemberId);
+
+            return !commentRepository.existsByIdAndMember(commentsId, loginMember);
         }
 
         return false;
