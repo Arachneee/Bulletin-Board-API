@@ -1,4 +1,4 @@
-package bulletin.board.session;
+package bulletin.board.constant;
 
 public class SessionConst {
 	public static final String LOGIN_MEMBER = "loginMember";

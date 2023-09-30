@@ -2,7 +2,7 @@ package bulletin.board.interceptor;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import bulletin.board.session.SessionConst;
+import bulletin.board.constant.SessionConst;
 import bulletin.board.domain.Member;
 import bulletin.board.repository.CommentRepository;
 import bulletin.board.repository.PostRepository;
