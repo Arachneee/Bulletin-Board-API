@@ -31,16 +31,26 @@ public class MemberService {
 	}
 
 	private void validateMemberRequest(MemberRequest memberRequest) {
-		if (!memberRequest.getPassword().equals(memberRequest.getPasswordRe())) {
-			throw new PasswordMismatchException(ErrorCode.PASSWORD_NOT_SAME);
-		}
+		validatePassword(memberRequest);
+		validateLoginId(memberRequest);
+		validateName(memberRequest);
+	}
 
+	private void validateName(MemberRequest memberRequest) {
+		if (memberRepository.existsByName(memberRequest.getName())) {
+			throw new DuplicatedNameException(ErrorCode.DUPLICATED_NAME);
+		}
+	}
+
+	private void validateLoginId(MemberRequest memberRequest) {
 		if (memberRepository.existsByLoginId(memberRequest.getLoginId())) {
 			throw new DuplicatedLoginIdException(ErrorCode.DUPLICATED_LOGIN_ID);
 		}
+	}
 
-		if (memberRepository.existsByName(memberRequest.getName())) {
-			throw new DuplicatedNameException(ErrorCode.DUPLICATED_NAME);
+	private void validatePassword(MemberRequest memberRequest) {
+		if (!memberRequest.getPassword().equals(memberRequest.getPasswordRe())) {
+			throw new PasswordMismatchException(ErrorCode.PASSWORD_NOT_SAME);
 		}
 	}
 

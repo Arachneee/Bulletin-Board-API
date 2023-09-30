@@ -35,12 +35,19 @@ public class CommentEmpathyService {
 	}
 
 	private void validateEmpathy(Member member, Comment comment) {
-		if (comment.isAlreadyEmpathized(member)) {
-			throw new DuplicatedCommentEmpathyException(ErrorCode.DUPLICATED_EMPATHY);
-		}
+		validateDuplicateEmpathy(member, comment);
+		validateSelfEmpathy(member, comment);
+	}
 
+	private void validateSelfEmpathy(Member member, Comment comment) {
 		if (comment.isWriter(member)) {
 			throw new SelfEmpathyException(ErrorCode.SELF_EMPATHY);
+		}
+	}
+
+	private void validateDuplicateEmpathy(Member member, Comment comment) {
+		if (comment.isAlreadyEmpathized(member)) {
+			throw new DuplicatedCommentEmpathyException(ErrorCode.DUPLICATED_EMPATHY);
 		}
 	}
 

@@ -50,20 +50,21 @@ public class AuthorityInterceptor implements HandlerInterceptor {
     private boolean isNotAuthorityMember(String requestURI, Member loginMember) {
         String[] urlSplit = requestURI.split("/");
 
-        // 회원 Update, Delete
+
+        // url : /members/{memberId} method : PATH, DELETE
         if (requestURI.matches("^/members/[0-9]+$")) {
             Long memberId = Long.valueOf(urlSplit[2]);
             return !loginMember.getId().equals(memberId);
         }
 
-        // 게시글 Update, Delete
+        // url : /posts/{postId} method : PATH, DELETE
         if (requestURI.matches("^/posts/[0-9]+$")) {
             Long postId = Long.valueOf(urlSplit[2]);
 
             return !postRepository.existsByIdAndMember(postId, loginMember);
         }
 
-        // 댓글 Update, Delete
+        // url : /posts/{postId}/comments/{commentId} method : PATH, DELETE
         if (requestURI.matches("^/posts/[0-9]+/comments/[0-9]+$")) {
             Long commentsId = Long.valueOf(urlSplit[4]);
 
