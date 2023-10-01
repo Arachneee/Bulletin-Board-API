@@ -51,21 +51,21 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.badRequest().body(errorResponse);
 	}
 
-	@Order(4)
+	@Order(5)
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
 	protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
 		ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.TYPE_MISMATCH);
 		return ResponseEntity.badRequest().body(errorResponse);
 	}
 
-	@Order(5)
+	@Order(6)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	protected ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException e) {
 		ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.INVALID_INPUT, e.getBindingResult());
 		return ResponseEntity.badRequest().body(errorResponse);
 	}
 
-	@Order(6)
+	@Order(7)
 	@ExceptionHandler(BusinessException.class)
 	protected ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
 		ErrorCode errorCode = e.getErrorCode();
@@ -73,7 +73,7 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(errorCode.getStatus()).body(errorResponse);
 	}
 
-	@Order(7)
+	@Order(8)
 	@ExceptionHandler(Exception.class)
 	protected ResponseEntity<ErrorResponse> handleException(Exception e) {
 		ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
