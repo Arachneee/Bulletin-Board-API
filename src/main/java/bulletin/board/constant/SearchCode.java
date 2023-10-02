@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public enum SearchCode {
-    TITLE, CONTENT, NAME
+    TITLE, CONTENT, NAME;
 }

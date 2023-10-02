@@ -7,10 +7,8 @@ import bulletin.board.dto.PostDetailResponse;
 import bulletin.board.dto.PostResponse;
 import bulletin.board.dto.PostSearchRequest;
 import bulletin.board.exceptions.EntityNotFoundException;
-import bulletin.board.exceptions.PostSearchCodeException;
 import bulletin.board.repository.PostRepository;
 import bulletin.board.constant.ErrorCode;
-import bulletin.board.constant.SearchCode;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
@@ -56,15 +54,9 @@ public class PostService {
 
 	@Transactional(readOnly = true)
 	public Page<PostResponse> findPosts(PostSearchRequest postSearchRequest, Pageable pageable) {
-		String searchString = postSearchRequest.getSearchString();
-		SearchCode searchCode = postSearchRequest.getSearchCode();
-
-		Page<Post> posts = switch (searchCode) {
-			case TITLE -> postRepository.findByTitleContains(searchString, pageable);
-			case CONTENT -> postRepository.findByContentContains(searchString, pageable);
-			case NAME -> postRepository.findByNameContains(searchString, pageable);
-			default -> throw new PostSearchCodeException(ErrorCode.INVALID_INPUT);
-		};
+		Page<Post> posts = postRepository.searchPosts(postSearchRequest.getSearchCode(),
+														postSearchRequest.getSearchString(),
+														pageable);
 
 		return posts.map(PostResponse::of);
 	}

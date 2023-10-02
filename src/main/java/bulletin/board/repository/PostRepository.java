@@ -13,7 +13,7 @@ import org.springframework.data.repository.query.Param;
 
 import bulletin.board.domain.Post;
 
-public interface PostRepository extends JpaRepository<Post, Long> {
+public interface PostRepository extends JpaRepository<Post, Long>, PostQueryDslRepository {
 
 	@EntityGraph(attributePaths = {"member"})
 	Page<Post> findByTitleContains(@Param("title") String searchString, Pageable pageable);
