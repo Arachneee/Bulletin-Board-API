@@ -6,7 +6,6 @@ import bulletin.board.dto.MemberResponse;
 import bulletin.board.exceptions.DuplicatedLoginIdException;
 import bulletin.board.exceptions.DuplicatedNameException;
 import bulletin.board.exceptions.EntityNotFoundException;
-import bulletin.board.exceptions.PasswordMismatchException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +29,6 @@ public class MemberService {
 	}
 
 	private void validateMemberRequest(MemberRequest memberRequest) {
-		validatePassword(memberRequest);
 		validateLoginId(memberRequest);
 		validateName(memberRequest);
 	}
@@ -47,11 +45,6 @@ public class MemberService {
 		}
 	}
 
-	private void validatePassword(MemberRequest memberRequest) {
-		if (!memberRequest.getPassword().equals(memberRequest.getPasswordRe())) {
-			throw new PasswordMismatchException(ErrorCode.PASSWORD_NOT_SAME);
-		}
-	}
 
 	@Transactional
 	private Member saveMember(MemberRequest memberRequest) {

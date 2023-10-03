@@ -22,9 +22,5 @@ public class MemberRequest {
 
 	@NotBlank
 	@Length(max=30)
-	private String passwordRe;
-
-	@NotBlank
-	@Length(max=30)
 	private String name;
 }
