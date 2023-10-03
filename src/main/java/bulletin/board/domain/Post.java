@@ -58,17 +58,6 @@ public class Post extends BaseEntity {
 		return post;
 	}
 
-	public static Post createRowMap(String title, String content, Member member, Integer viewCount) {
-		Post post = new Post();
-
-		post.setTitle(title);
-		post.setContent(content);
-		post.setMember(member);
-		post.setViewCount(viewCount);
-
-		return post;
-	}
-
 	private void setTitle(String title) {
 		this.title = title;
 	}
@@ -92,5 +81,13 @@ public class Post extends BaseEntity {
 	public void update(String title, String content) {
 		this.title = title;
 		this.content = content;
+	}
+
+	public boolean isWriter(Member member) {
+		return this.member.getId().equals(member.getId());
+	}
+
+	public String getWriterName() {
+		return member.getName();
 	}
 }

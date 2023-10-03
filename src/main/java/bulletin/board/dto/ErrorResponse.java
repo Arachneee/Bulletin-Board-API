@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import bulletin.board.constant.ErrorCode;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -38,27 +40,27 @@ public class ErrorResponse {
 		return new ErrorResponse(errorCode);
 	}
 
+
 	@Getter
-	@NoArgsConstructor(access = AccessLevel.PROTECTED)
+	@Builder
 	private static class BindingError {
 		private String field;
 		private String value;
 		private String fieldMessage;
 
-		public BindingError(String field, String value, String fieldMessage) {
-			this.field = field;
-			this.value = value;
-			this.fieldMessage = fieldMessage;
+		public static List<BindingError> of(BindingResult bindingResult) {
+			return bindingResult.getFieldErrors()
+				.stream()
+				.map(fieldError -> BindingError.builder()
+												.field(fieldError.getField())
+												.value(getValue(fieldError))
+												.fieldMessage(fieldError.getDefaultMessage())
+												.build())
+				.collect(Collectors.toList());
 		}
 
-		public static List<BindingError> of(BindingResult bindingResult) {
-			return bindingResult.getFieldErrors().stream()
-										.map(fieldError -> new BindingError(
-											fieldError.getField(),
-											fieldError.getRejectedValue() == null ? "" :
-												fieldError.getRejectedValue().toString(),
-											fieldError.getDefaultMessage()))
-										.collect(Collectors.toList());
+		private static String getValue(FieldError fieldError) {
+			return fieldError.getRejectedValue() == null ? "" : fieldError.getRejectedValue().toString();
 		}
 	}
 }

@@ -4,13 +4,11 @@ import java.time.LocalDateTime;
 
 import bulletin.board.domain.Comment;
 import bulletin.board.domain.Member;
-import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@Builder
 public class CommentResponse {
 	private Long id;
 	private String content;
@@ -20,24 +18,16 @@ public class CommentResponse {
 	private boolean editButton;
 	private boolean empathyButton;
 
-	private CommentResponse(Long id, String content, String name, LocalDateTime createdDate, Integer empathyCount,
-		boolean editButton, boolean empathyButton) {
-		this.id = id;
-		this.content = content;
-		this.name = name;
-		this.createdDate = createdDate;
-		this.empathyCount = empathyCount;
-		this.editButton = editButton;
-		this.empathyButton = empathyButton;
-	}
-
 	public static CommentResponse of(Comment comment, Member member) {
-		return new CommentResponse(comment.getId(),
-			comment.getContent(),
-			comment.getMember().getName(),
-			comment.getCreatedDate(),
-			comment.getEmpathyCount(),
-			comment.isWriter(member),
-			comment.canEmpathy(member));
+		return CommentResponse.builder()
+								.id(comment.getId())
+								.content(comment.getContent())
+								.name(comment.getWriterName())
+								.createdDate(comment.getCreatedDate())
+								.empathyCount(comment.getEmpathyCount())
+								.editButton(comment.isWriter(member))
+								.empathyButton(comment.canEmpathy(member))
+								.build();
+
 	}
 }

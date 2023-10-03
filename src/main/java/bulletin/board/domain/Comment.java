@@ -4,7 +4,6 @@ import static jakarta.persistence.FetchType.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import bulletin.board.constant.ErrorCode;
 import bulletin.board.exceptions.DuplicatedCommentEmpathyException;
@@ -103,7 +102,7 @@ public class Comment extends BaseEntity {
 	public boolean isAlreadyEmpathized(Member member) {
 		return commentEmpathies.stream()
 			.map(CommentEmpathy::getMemberId)
-			.collect(Collectors.toList())
+			.toList()
 			.contains(member.getId());
 	}
 
@@ -113,5 +112,9 @@ public class Comment extends BaseEntity {
 
 	public boolean canEmpathy(Member member) {
 		return !(isAlreadyEmpathized(member) || isWriter(member));
+	}
+
+	public String getWriterName() {
+		return member.getName();
 	}
 }

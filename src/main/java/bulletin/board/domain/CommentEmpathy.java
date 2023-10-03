@@ -33,8 +33,8 @@ public class CommentEmpathy extends BaseEntity {
 
     public static CommentEmpathy create(Comment comment, Member member) {
         CommentEmpathy commentEmpathy = new CommentEmpathy();
-        commentEmpathy.setComment(comment);
         commentEmpathy.setMember(member);
+        commentEmpathy.setComment(comment);
 
         return commentEmpathy;
     }
