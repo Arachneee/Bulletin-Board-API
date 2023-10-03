@@ -25,10 +25,9 @@ public class CommentEmpathyController {
 	public ResponseEntity<Void> createCommentEmpathy(@Login Member member,
 														@PathVariable Long postId,
 														@PathVariable Long commentId) {
-		Long commentEmpathyId = commentEmpathyService.createCommentEmpathy(member, commentId);
+		commentEmpathyService.createCommentEmpathy(member, commentId);
 
-		return ResponseEntity.created(URI.create(
-			"/posts/" + postId + "/comments/" + commentId + "/empathies/" + commentEmpathyId)).build();
+		return ResponseEntity.accepted().build();
 	}
 
 	@DeleteMapping("")

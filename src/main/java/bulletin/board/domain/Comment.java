@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import bulletin.board.constant.ErrorCode;
+import bulletin.board.exceptions.DuplicatedCommentEmpathyException;
+import bulletin.board.exceptions.SelfEmpathyException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -76,12 +79,25 @@ public class Comment extends BaseEntity {
 	}
 
 	public void addEmpathy(CommentEmpathy commentEmpathy) {
+		validateCommentEmpathy(commentEmpathy.getMember());
 		commentEmpathies.add(commentEmpathy);
 	}
 
+	private void validateCommentEmpathy(Member empathyMember) {
+		validateWriter(empathyMember);
+		validateAlreadyEmpathized(empathyMember);
+	}
 
-	public boolean isWriter(Member member) {
-		return this.member.getId().equals(member.getId());
+	public void validateWriter(Member member) {
+		if (isWriter(member)) {
+			throw new SelfEmpathyException(ErrorCode.SELF_EMPATHY);
+		}
+	}
+
+	public void validateAlreadyEmpathized(Member member) {
+		if (isAlreadyEmpathized(member)) {
+			throw new DuplicatedCommentEmpathyException(ErrorCode.DUPLICATED_EMPATHY);
+		}
 	}
 
 	public boolean isAlreadyEmpathized(Member member) {
@@ -91,8 +107,11 @@ public class Comment extends BaseEntity {
 			.contains(member.getId());
 	}
 
-	public int empathyCountDiff(Comment other) {
-		return this.getEmpathyCount() - other.getEmpathyCount();
+	public boolean isWriter(Member member) {
+		return this.member.getId().equals(member.getId());
 	}
 
+	public boolean canEmpathy(Member member) {
+		return !(isAlreadyEmpathized(member) || isWriter(member));
+	}
 }

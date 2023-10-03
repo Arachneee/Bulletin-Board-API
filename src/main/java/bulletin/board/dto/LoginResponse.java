@@ -13,6 +13,7 @@ public class LoginResponse {
 
     private String message;
     private MemberResponse memberResponse;
+    private static final String LOGIN_MESSAGE = "로그인 성공했습니다.";
 
     public LoginResponse(String message, MemberResponse memberResponse) {
         this.message = message;
@@ -20,6 +21,6 @@ public class LoginResponse {
     }
 
     public static LoginResponse login(Member member) {
-        return new LoginResponse("로그인 성공했습니다.", MemberResponse.of(member));
+        return new LoginResponse(LOGIN_MESSAGE, MemberResponse.of(member));
     }
 }

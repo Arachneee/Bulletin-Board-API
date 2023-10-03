@@ -6,10 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import bulletin.board.domain.Comment;
 import bulletin.board.domain.CommentEmpathy;
 import bulletin.board.domain.Member;
-import bulletin.board.exceptions.DuplicatedCommentEmpathyException;
 import bulletin.board.exceptions.EntityNotFoundException;
 import bulletin.board.constant.ErrorCode;
-import bulletin.board.exceptions.SelfEmpathyException;
 import bulletin.board.repository.CommentEmpathyRepository;
 import bulletin.board.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,33 +20,12 @@ public class CommentEmpathyService {
 	private final CommentRepository commentRepository;
 
 	@Transactional
-	public Long createCommentEmpathy(Member member, Long commentId) {
+	public void createCommentEmpathy(Member member, Long commentId) {
 		Comment findComment = commentRepository.findWithEmpathyById(commentId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.COMMENT_NOT_FOUND));
 
-		validateEmpathy(member, findComment);
-
 		CommentEmpathy commentEmpathy = CommentEmpathy.create(findComment, member);
 		commentEmpathyRepository.save(commentEmpathy);
-
-		return commentEmpathy.getId();
-	}
-
-	private void validateEmpathy(Member member, Comment comment) {
-		validateDuplicateEmpathy(member, comment);
-		validateSelfEmpathy(member, comment);
-	}
-
-	private void validateSelfEmpathy(Member member, Comment comment) {
-		if (comment.isWriter(member)) {
-			throw new SelfEmpathyException(ErrorCode.SELF_EMPATHY);
-		}
-	}
-
-	private void validateDuplicateEmpathy(Member member, Comment comment) {
-		if (comment.isAlreadyEmpathized(member)) {
-			throw new DuplicatedCommentEmpathyException(ErrorCode.DUPLICATED_EMPATHY);
-		}
 	}
 
 	@Transactional
