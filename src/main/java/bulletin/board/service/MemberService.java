@@ -22,7 +22,6 @@ public class MemberService {
 
 	private final MemberRepository memberRepository;
 
-
 	public Long createMember(MemberRequest memberRequest) {
 		validateMemberRequest(memberRequest);
 		Member savedMember = saveMember(memberRequest);
