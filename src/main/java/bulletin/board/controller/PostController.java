@@ -25,7 +25,9 @@ import bulletin.board.dto.PostResponse;
 import bulletin.board.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/posts")
@@ -45,6 +47,7 @@ public class PostController {
 		@Valid PostSearchRequest postSearchRequest,
 		@Valid @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
 
+		log.info("vue 연결완료");
 		return ResponseEntity.ok().body(postService.findPosts(postSearchRequest, pageable));
 	}
 
