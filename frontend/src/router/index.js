@@ -3,6 +3,7 @@ import PageHome from '@/views/PageHome.vue'
 import BoardList from '@/views/board/BoardList.vue'
 import BoardDetail from '@/views/board/BoardDetail.vue'
 import BoardWrite from '@/views/board/BoardWrite.vue'
+import CommentWrite from '@/views/board/comment/CommentWrite.vue'
 
 
 const routes = [
@@ -36,6 +37,11 @@ const routes = [
     path: '/board/write',
     name: 'BoardWrite',
     component: BoardWrite
+  },
+  {
+    path: '/comment/write',
+    name: 'CommentWrite',
+    component: CommentWrite
   },
 ]
 

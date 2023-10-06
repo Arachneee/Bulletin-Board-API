@@ -44,9 +44,9 @@
           <option value="CONTENT">내용</option>
         </select>
         &nbsp;
-        <input type="text" v-model="searchString" @keyup.enter="fnPage()">
+        <input type="text" v-model="searchString" @keyup.enter="fnPage(0)">
         &nbsp;
-        <button @click="fnPage()">검색</button>
+        <button @click="fnPage(0)">검색</button>
 
       </span>
     </div>
@@ -63,7 +63,6 @@ export default {
     return {
       requestBody: {}, //리스트 페이지 데이터전송
       list: {}, //리스트 데이터
-      no: '', //게시판 숫자처리
 
       page: this.$route.query.page ? this.$route.query.page : 0,
       size: this.$route.query.size ? this.$route.query.size : 10,
@@ -129,10 +128,8 @@ export default {
       })
     },
     fnPage(n) {
-      if (this.page !== n) {
-        this.page = n
-        this.fnGetList()
-      }
+      this.page = n
+      this.fnGetList()
     }
   },
 }
