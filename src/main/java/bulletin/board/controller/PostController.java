@@ -47,13 +47,14 @@ public class PostController {
 		@Valid PostSearchRequest postSearchRequest,
 		@Valid @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
 
-		log.info("vue 연결완료");
 		return ResponseEntity.ok().body(postService.findPosts(postSearchRequest, pageable));
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<PostDetailResponse> findPost(@Login Member member, @PathVariable Long id) {
-		return ResponseEntity.ok().body(postService.findPost(member, id));
+		PostDetailResponse post = postService.findPost(member, id);
+
+		return ResponseEntity.ok().body(post);
 	}
 
 	@PatchMapping("/{id}")

@@ -38,6 +38,20 @@ public class Member extends BaseEntity {
 		return member;
 	}
 
+	public static Member testCreate(String loginId, String password, String name, Long id) {
+		Member member = new Member();
+		member.setLoginId(loginId);
+		member.setPassword(password);
+		member.setName(name);
+		member.setId(id);
+
+		return member;
+	}
+
+	private void setId(Long id) {
+		this.id = id;
+	}
+
 	private void setLoginId(String loginId) {
 		this.loginId = loginId;
 	}

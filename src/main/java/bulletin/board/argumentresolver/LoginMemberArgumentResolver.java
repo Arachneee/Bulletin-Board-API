@@ -24,12 +24,14 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 
-        HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
-        HttpSession session = request.getSession(false);
-        if (session == null) {
-            return null;
-        }
 
-        return session.getAttribute(SessionConst.LOGIN_MEMBER);
+        return Member.testCreate("aaa", "1234", "nameA", 1L);
+//        HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
+//        HttpSession session = request.getSession(false);
+//        if (session == null) {
+//            return null;
+//        }
+//
+//        return session.getAttribute(SessionConst.LOGIN_MEMBER);
     }
 }

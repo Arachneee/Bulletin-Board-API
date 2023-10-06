@@ -25,9 +25,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AuthorityInterceptor(postRepository, commentRepository))
-                .addPathPatterns("/**")
-                .excludePathPatterns("/", "/members", "/login", "/posts", "/css/**", "/*.ico", "/error/**", "/vue/**");
+//        registry.addInterceptor(new AuthorityInterceptor(postRepository, commentRepository))
+//                .addPathPatterns("/**")
+//                .excludePathPatterns("/", "/members", "/login", "/posts", "/css/**", "/*.ico", "/error/**", "/vue/**");
     }
 
     @Override

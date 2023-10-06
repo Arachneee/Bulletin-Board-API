@@ -9,19 +9,24 @@ import bulletin.board.dto.PostSearchRequest;
 import bulletin.board.exceptions.EntityNotFoundException;
 import bulletin.board.repository.PostRepository;
 import bulletin.board.constant.ErrorCode;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostService {
 
 	private final PostRepository postRepository;
+	private final EntityManager em;
 
 	@Transactional
 	public Long createPost(Member member, PostRequest postRequest) {
@@ -31,6 +36,7 @@ public class PostService {
 
 	@Transactional
 	public void updatePost(Long postId, PostRequest postRequest) {
+
 		Post findPost = postRepository.findById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.POST_NOT_FOUND));
 
