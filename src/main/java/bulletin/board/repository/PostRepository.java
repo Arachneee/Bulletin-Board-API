@@ -31,6 +31,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostQueryDslR
 	@EntityGraph(attributePaths = {"member"})
 	Optional<Post> findWithMemberById(Long id);
 
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	@EntityGraph(attributePaths = {"comments"})
 	Optional<Post> findWithCommentsById(Long id);
 

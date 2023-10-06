@@ -1,6 +1,7 @@
 package bulletin.board.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Getter
@@ -11,5 +12,6 @@ public class PostRequest {
 	private String title;
 
 	@NotBlank
+	@Size(max = 10000)
 	private String content;
 }
