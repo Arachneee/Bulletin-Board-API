@@ -79,13 +79,12 @@ export default {
 
             console.log('patch 응답완료' + res.data)
             alert('글이 수정되었습니다.' + this.idx)
-
+            this.fnView(this.idx)
             }).catch((err) => {
                 if (err.message.indexOf('Network Error') > -1) {
                 alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
                 }
             })
-        this.fnView(this.idx)
       }
 
     }
