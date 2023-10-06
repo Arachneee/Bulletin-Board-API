@@ -78,8 +78,8 @@ export default {
         for (let i = start_page; i <= end_page; i++) pageNumber.push(i);
         return pageNumber;
       },
-      searchCode: "TITLE",
-      searchString: "",
+      searchCode: "NAME",
+      searchString: "A",
     }
   },
   mounted() {
@@ -108,9 +108,27 @@ export default {
       })
     },
     formatDate(date) {
-          // 날짜 데이터를 `YYYY-MM-DD` 형식으로 변환합니다.
-          return dayjs(date).format("YYYY-MM-DD hh:ss");
-        },
+      // 날짜 데이터를 `YYYY-MM-DD` 형식으로 변환합니다.
+      return dayjs(date).format("YYYY-MM-DD hh:ss");
+    },
+    fnView(idx) {
+      this.requestBody.idx = idx
+      this.$router.push({
+        path: './detail',
+        query: this.requestBody
+      })
+    },
+    fnWrite() {
+      this.$router.push({
+        path: './write'
+      })
+    },
+    fnPage(n) {
+      if (this.page !== n) {
+        this.page = n
+        this.fnGetList()
+      }
+    }
   },
 }
 </script>
