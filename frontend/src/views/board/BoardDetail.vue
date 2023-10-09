@@ -25,29 +25,41 @@
         <option value="createdDate,asc">오래된순</option>
     </select>
         &nbsp;
-    <table class="w3-table-all">
-      <thead>
-      <tr>
-        <th>등록시간</th>
-        <th>작성자</th>
-        <th>내용</th>
-        <th>공감수</th>
-        <th>공감</th>
-      </tr>
-      </thead>
-      <tbody>
+    <div class="w3-table-all">
+      <ul class="comment">
       <tr v-for="(row, id) in list" :key="id">
-        <td><span>{{ formatDate(row.createdDate) }}</span></td>
-        <td>{{ row.name }}</td>
-        <td>{{ row.content }}</td>
-        <td>{{ row.empathyCount }}</td>
-        <td><button v-if="row.empathyButton" type="button" class="w2-button w3-round w3-blue" v-on:click="fnCmEmpathy(row.id)">공감</button></td>
-        <td><button v-if="!row.empathyButton && !row.editButton" type="button" class="w2-button w3-round w3-blue" v-on:click="fnCmEmpathyDelete(row.id)">공감 취소</button></td>
-        <td><button v-if="row.editButton" type="button" class="w2-button w3-round w3-blue-gray" v-on:click="fnCmUpdate(row.id, row.content)">수정</button>&nbsp;</td>
-        <td><button v-if="row.editButton" type="button" class="w2-button w3-round w3-red" v-on:click="fnCmDelete(row.id)">삭제</button>&nbsp;</td>
+        <td @click="reply(row.id)"><span>{{ formatDate(row.createdDate) }}</span></td>
+        <td @click="reply(row.id)">{{ row.name }}</td>
+        <td @click="reply(row.id)">{{ row.content }}</td>
+        <td @click="reply(row.id)">{{ row.empathyCount }}</td>
+        <td ><button v-if="row.empathyButton" type="button" class="w2-button w3-round w3-blue" v-on:click="fnCmEmpathy(row.id)">공감</button></td>
+        <td ><button v-if="!row.empathyButton && !row.editButton" type="button" class="w2-button w3-round w3-blue" v-on:click="fnCmEmpathyDelete(row.id)">공감 취소</button></td>
+        <td ><button v-if="row.editButton" type="button" class="w2-button w3-round w3-blue-gray" v-on:click="fnCmUpdate(row.id, row.content)">수정</button>&nbsp;</td>
+        <td ><button v-if="row.editButton" type="button" class="w2-button w3-round w3-red" v-on:click="fnCmDelete(row.id)">삭제</button>&nbsp;</td>
+
+        <ul v-if="row.replies.length !== 0">
+          <tr v-for="(r, i) in row.replies" :key="i">
+            <td @click="reply(row.id)"><span>{{ formatDate(r.createdDate) }}</span></td>
+            <td @click="reply(row.id)">{{ r.name }}</td>
+            <td @click="reply(row.id)">{{ r.content }}</td>
+            <td @click="reply(row.id)">{{ r.empathyCount }}</td>
+            <td ><button v-if="r.empathyButton" type="button" class="w2-button w3-round w3-blue" v-on:click="fnCmEmpathy(r.id)">공감</button></td>
+            <td ><button v-if="!r.empathyButton && !r.editButton" type="button" class="w2-button w3-round w3-blue" v-on:click="fnCmEmpathyDelete(r.id)">공감 취소</button></td>
+            <td ><button v-if="r.editButton" type="button" class="w2-button w3-round w3-blue-gray" v-on:click="fnCmUpdate(r.id, r.content)">수정</button>&nbsp;</td>
+            <td ><button v-if="r.editButton" type="button" class="w2-button w3-round w3-red" v-on:click="fnCmDelete(r.id)">삭제</button>&nbsp;</td>
+          </tr>
+        </ul>
+        <div v-if="replyId === row.id">
+          <h4>대댓글 쓰기</h4>
+          <textarea id="" cols="30" rows="3" v-model="commentContent" class="w3-input w3-border" style="resize: none;"></textarea>
+          <div class="common-buttons">
+            <button type="button" class="w3-button w3-round w3-blue-gray" v-on:click="fnReplySave(row.id)">쓰기</button>&nbsp;
+          </div>
+        </div>
+    
       </tr>
-      </tbody>
-    </table>
+    </ul>
+    </div>
 
     <div class="pagination w3-bar w3-padding-16 w3-small">
       <span class="pg">
@@ -101,6 +113,7 @@ export default {
       cmTotalPages: 0,
 
       commentContent: '',
+      replyId: ''
     }
   },
   mounted() {
@@ -236,12 +249,31 @@ export default {
       console.log('cmPage' + n)
       this.commentPage = n
       this.fnCmGetView()
+    },
+    reply(id) {
+      this.replyId = this.reply === id ? 0 : id
+    },
+    fnReplySave(id) {
+      this.cmRequestBody = { // 데이터 전송
+        commentContent: this.commentContent,
+      }
+
+      this.$axios.post(this.$serverUrl + '/posts/' + this.idx + '/comments/' + id, this.cmRequestBody)
+          .then(() => {
+            alert('대댓글이 작성되었습니다.')
+            this.fnCmGetView();
+          }).catch((err) => {
+        console.log(err);
+      })
     }
 
   }
 }
 </script>
 <style scoped>
-
+.comment {
+  display: flex;
+  flex-direction: column;
+}
 
 </style>
