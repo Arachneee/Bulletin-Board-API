@@ -5,14 +5,7 @@ import java.util.Map;
 
 import bulletin.board.dto.MemberNameRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import bulletin.board.dto.MemberRequest;
 import bulletin.board.dto.MemberResponse;
@@ -50,6 +43,20 @@ public class MemberController {
 		memberService.deleteMember(id);
 
 		return ResponseEntity.noContent().build();
+	}
+
+	@PostMapping("/loginId")
+	public ResponseEntity<Void> checkLoginId(@RequestBody Map<String, String>  loginIdMap) {
+		memberService.validateLoginId(loginIdMap.get("loginId"));
+
+		return ResponseEntity.ok().build();
+	}
+
+	@PostMapping("/name")
+	public ResponseEntity<Void> checkName(@RequestBody Map<String, String>  nameMap) {
+		memberService.validateLoginId(nameMap.get("name"));
+
+		return ResponseEntity.ok().build();
 	}
 
 }

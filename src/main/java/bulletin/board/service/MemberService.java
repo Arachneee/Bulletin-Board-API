@@ -29,18 +29,18 @@ public class MemberService {
 	}
 
 	private void validateMemberRequest(MemberRequest memberRequest) {
-		validateLoginId(memberRequest);
-		validateName(memberRequest);
+		validateLoginId(memberRequest.getLoginId());
+		validateName(memberRequest.getName());
 	}
 
-	private void validateName(MemberRequest memberRequest) {
-		if (memberRepository.existsByName(memberRequest.getName())) {
+	public void validateName(String name) {
+		if (memberRepository.existsByName(name)) {
 			throw new DuplicatedNameException(ErrorCode.DUPLICATED_NAME);
 		}
 	}
 
-	private void validateLoginId(MemberRequest memberRequest) {
-		if (memberRepository.existsByLoginId(memberRequest.getLoginId())) {
+	public void validateLoginId(String loginId) {
+		if (memberRepository.existsByLoginId(loginId)) {
 			throw new DuplicatedLoginIdException(ErrorCode.DUPLICATED_LOGIN_ID);
 		}
 	}
