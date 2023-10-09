@@ -1,6 +1,7 @@
 package bulletin.board.dto;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,10 @@ public class CommentResponse {
 				.empathyCount(comment.getEmpathyCount())
 				.editButton(comment.isWriter(member))
 				.empathyButton(comment.canEmpathy(member))
-				.replies(comment.getReplies().stream().map(replay -> CommentResponse.of(replay, member)).collect(Collectors.toList()))
+				.replies(comment.getReplies().stream()
+						.map(replay -> CommentResponse.of(replay, member))
+						.sorted(Comparator.comparing(CommentResponse::getCreatedDate).reversed())
+						.collect(Collectors.toList()))
 				.build();
 
 	}

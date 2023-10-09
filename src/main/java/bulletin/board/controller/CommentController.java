@@ -85,7 +85,4 @@ public class CommentController {
 		return ResponseEntity.created(URI.create("/posts/" + postId + "/comments/" + commentId + "/replies/" + replyCommentId)).build();
 	}
 
-
-
-
 }

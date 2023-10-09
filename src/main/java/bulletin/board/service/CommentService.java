@@ -79,7 +79,7 @@ public class CommentService {
 		Comment findComment = commentRepository.findWithPostById(commentId)
 				.orElseThrow(() -> new EntityNotFoundException(ErrorCode.COMMENT_NOT_FOUND));
 
-		Comment replyComment = Comment.createReply(commentRequest.getCommentContent(), findComment, member);
+		Comment replyComment = Comment.createReply(commentRequest.getCommentContent(), findComment.getRootComment(), member);
 		commentRepository.save(replyComment);
 
 		return replyComment.getId();

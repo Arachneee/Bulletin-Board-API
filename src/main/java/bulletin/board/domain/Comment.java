@@ -141,4 +141,8 @@ public class Comment extends BaseEntity {
 	public String getWriterName() {
 		return member.getName();
 	}
+
+	public Comment getRootComment() {
+		return parentComment == null ? this : getRootComment();
+	}
 }
