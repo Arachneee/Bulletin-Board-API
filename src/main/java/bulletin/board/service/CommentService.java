@@ -36,7 +36,7 @@ public class CommentService {
 
 	@Transactional(readOnly = true)
 	public Page<CommentResponse> findComments(Long postId, Member member, Pageable pageable) {
-		Page<Comment> comments = commentRepository.findWithMemberByPostId(postId, pageable);
+		Page<Comment> comments = commentRepository.findWithMemberByPostIdAndParentCommentIsNull(postId, pageable);
 
 		return comments.map(comment -> CommentResponse.of(comment, member));
 	}
@@ -74,4 +74,14 @@ public class CommentService {
 	}
 
 
+	@Transactional
+	public Long createReply(Member member, Long commentId, CommentRequest commentRequest) {
+		Comment findComment = commentRepository.findWithPostById(commentId)
+				.orElseThrow(() -> new EntityNotFoundException(ErrorCode.COMMENT_NOT_FOUND));
+
+		Comment replyComment = Comment.createReply(commentRequest.getCommentContent(), findComment, member);
+		commentRepository.save(replyComment);
+
+		return replyComment.getId();
+	}
 }

@@ -15,7 +15,7 @@ import bulletin.board.domain.Comment;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 	@EntityGraph(attributePaths = {"member"})
-	Page<Comment> findWithMemberByPostId(Long postId, Pageable pageable);
+	Page<Comment> findWithMemberByPostIdAndParentCommentIsNull(Long postId, Pageable pageable);
 
 	@EntityGraph(attributePaths = {"member", "commentEmpathies"})
 	Optional<Comment> findWithMemberAndEmpathyById(Long id);
@@ -28,4 +28,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 	Optional<Comment> findTop1WithMemberAndEmpathyByPostId(Long postId);
 
 	Boolean existsByIdAndMember(Long id, Member member);
+
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
+	@EntityGraph(attributePaths = {"post"})
+    Optional<Comment> findWithPostById(Long id);
 }

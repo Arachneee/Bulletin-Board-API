@@ -21,6 +21,7 @@ import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 
 @Entity
 @Getter
@@ -46,11 +47,29 @@ public class Comment extends BaseEntity {
 	@OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
 	private List<CommentEmpathy> commentEmpathies = new ArrayList<>();
 
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "parent_comment_id")
+	private Comment parentComment;
+
+	@BatchSize(size = 10)
+	@OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
+	private List<Comment> replies = new ArrayList<>();
+
 
 	public static Comment create(String content, Post post, Member member) {
 		Comment comment = new Comment();
 		comment.setContent(content);
 		comment.setPost(post);
+		comment.setMember(member);
+
+		return comment;
+	}
+
+	public static Comment createReply(String content, Comment parentComment, Member member) {
+		Comment comment = new Comment();
+		comment.setParentComment(parentComment);
+		comment.setContent(content);
+		comment.setPost(parentComment.getPost());
 		comment.setMember(member);
 
 		return comment;
@@ -67,6 +86,11 @@ public class Comment extends BaseEntity {
 
 	private void setMember(Member member) {
 		this.member = member;
+	}
+
+	private void setParentComment(Comment parentComment) {
+		this.parentComment = parentComment;
+		parentComment.getReplies().add(this);
 	}
 
 	public void update(String content) {

@@ -33,8 +33,7 @@ public class Post extends BaseEntity {
 	@Column(nullable = false, length = 100)
 	private String title;
 
-	@Lob
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "MEDIUMTEXT")
 	private String content;
 
 	@ManyToOne(fetch = LAZY)

@@ -75,6 +75,16 @@ public class CommentController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@PostMapping("/{commentId}")
+	public ResponseEntity<Void> createReply(@Login Member member,
+											@PathVariable Long postId,
+											@PathVariable Long commentId,
+											@Valid @RequestBody CommentRequest commentRequest) {
+		Long replyCommentId = commentService.createReply(member, commentId, commentRequest);
+
+		return ResponseEntity.created(URI.create("/posts/" + postId + "/comments/" + commentId + "/replies/" + replyCommentId)).build();
+	}
+
 
 
 
