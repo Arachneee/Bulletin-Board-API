@@ -1,9 +1,9 @@
 # Bulletin-Board-Api
-> Spring boot, Spring Data JPA 로 설계한 게시판 API입니다.
+> Spring boot, Spring Data JPA, QueryDsl, Vue.js 로 CSR 방식으로 설계한 게시판입니다.
 
 ### 프로젝트 소개
 
-서버-클라이언트의 역할을 Rest Api로 분리하기 위해 시작한 프로젝트입니다.<br>
+기존 SSR 방식에서 Rest Api로 CSR 방식으로 변경한 프로젝트입니다.<br>
 
 ### 프로젝트 기능
 
@@ -17,9 +17,13 @@
 
 
 #### 프레임워크 / 라이브러리
+##### 백엔드
 - Java 17
 - SpringBoot 3.3.1
 - Spring Data JPA
+- QueryDsl
+###### 프론트엔드
+- Vue
 
 #### Build Tool
 - Gradle 8.2.1
@@ -34,7 +38,6 @@
 - 대댓글 기능 추가
 - 첨부파일 기능 추가
 - 쪽지보내기 기능 추가
-- 프론트 도입
 
 ### 블로그
 - [다양한 예외를 어떻게 처리할까?](https://velog.io/@jhg2819/Spring-%EB%8B%A4%EC%96%91%ED%95%9C-%EC%98%88%EC%99%B8%EB%A5%BC-%EC%96%B4%EB%96%BB%EA%B2%8C-%EC%B2%98%EB%A6%AC%ED%95%A0%EA%B9%8C)
