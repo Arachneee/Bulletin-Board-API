@@ -1,5 +1,9 @@
 package bulletin.board.service;
 
+import java.util.Comparator;
+import java.util.List;
+
+import bulletin.board.dto.BestCommentResponse;
 import bulletin.board.dto.CommentRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,11 +54,11 @@ public class CommentService {
 	}
 
 	@Transactional(readOnly = true)
-	public CommentResponse findBestComment(Member member, Long postId) {
-		Comment findComment = commentRepository.findTop1WithMemberAndEmpathyByPostId(postId)
+	public BestCommentResponse findBestComment(Member member, Long postId) {
+		Comment findComment = commentRepository.findTopCommentByPostId(postId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.COMMENT_NOT_FOUND));
 
-		return CommentResponse.of(findComment, member);
+		return BestCommentResponse.of(findComment, member);
 	}
 
 	@Transactional

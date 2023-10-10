@@ -3,6 +3,7 @@ package bulletin.board.controller;
 import java.net.URI;
 import java.util.Map;
 
+import bulletin.board.dto.BestCommentResponse;
 import bulletin.board.dto.CommentRequest;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -51,7 +52,7 @@ public class CommentController {
 	}
 
 	@GetMapping("/top")
-	public ResponseEntity<CommentResponse> findBestComment(@Login Member member, @PathVariable Long postId) {
+	public ResponseEntity<BestCommentResponse> findBestComment(@Login Member member, @PathVariable Long postId) {
 		return ResponseEntity.ok().body(commentService.findBestComment(member, postId));
 	}
 
