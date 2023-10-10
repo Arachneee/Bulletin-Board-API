@@ -1,8 +1,14 @@
 <template>
   <div class="board-list">
     <div class="common-buttons">
-      <button type="button" class="w3-button w3-round w3-blue-gray" v-on:click="fnWrite">등록</button>
+      <button type="button" class="w3-button w3-round w3-blue-gray" v-on:click="fnWrite">글쓰기</button>
     </div>
+    <select class="w3-select" v-model="sort" @change="fnPage(0)">
+        <option value="">- 선택 -</option>
+        <option value="createdDate,desc">최신순</option>
+        <option value="createdDate,asc">오래된순</option>
+        <option value="viewCount,desc">조회순</option>
+    </select> &nbsp;
     <table class="w3-table-all">
       <thead>
       <tr>
@@ -66,6 +72,7 @@ export default {
 
       page: this.$route.query.page ? this.$route.query.page : 0,
       size: this.$route.query.size ? this.$route.query.size : 10,
+      sort: this.$route.query.sort ? this.$route.query.sort : 'createdDate,desc',
       keyword: this.$route.query.keyword,
 
       searchCode: "NAME",
@@ -88,6 +95,7 @@ export default {
         searchString: this.searchString,
         page: this.page,
         size: this.size,
+        sort: this.sort
       }
 
       console.log(this.requestBody)

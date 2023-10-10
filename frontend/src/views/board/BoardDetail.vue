@@ -27,13 +27,13 @@
           <td @click="reply(bestComment.id)">{{ bestComment.empathyCount }}</td>
           <td v-if="bestComment.empathyButton"><button  type="button" class="w2-button w3-round w3-blue" v-on:click="fnCmEmpathy(bestComment.id)">공감</button></td>
           <td v-if="!bestComment.empathyButton && !bestComment.editButton"><button  type="button" class="w2-button w3-round w3-blue" v-on:click="fnCmEmpathyDelete(bestComment.id)">공감 취소</button></td>
-          <td ><button v-if="bestComment.editButton" type="button" class="w2-button w3-round w3-blue-gray" v-on:click="fnCmUpdate(bestComment.id, bestComment.content)">수정</button>&nbsp;</td>
-          <td ><button v-if="bestComment.editButton" type="button" class="w2-button w3-round w3-red" v-on:click="fnCmDelete(bestComment.id)">삭제</button>&nbsp;</td>
+          <td v-if="bestComment.editButton"><button type="button" class="w2-button w3-round w3-blue-gray" v-on:click="fnCmUpdate(bestComment.id, bestComment.content)">수정</button>&nbsp;</td>
+          <td v-if="bestComment.editButton"><button type="button" class="w2-button w3-round w3-red" v-on:click="fnCmDelete(bestComment.id)">삭제</button>&nbsp;</td>
         </table>
       </div>
     <h4>댓글</h4>
     <select v-model="commentSort" @change="fnPage(0)">
-        <option value="createdDate,desc">- 선택 -</option>
+        <option value="">- 선택 -</option>
         <option value="createdDate,desc">최신순</option>
         <option value="createdDate,asc">오래된순</option>
     </select>
@@ -47,12 +47,12 @@
         <td @click="reply(row.id)">{{ row.empathyCount }}</td>
         <td v-if="row.empathyButton"><button  type="button" class="w2-button w3-round w3-blue" v-on:click="fnCmEmpathy(row.id)">공감</button></td>
         <td v-if="!row.empathyButton && !row.editButton"><button  type="button" class="w2-button w3-round w3-blue" v-on:click="fnCmEmpathyDelete(row.id)">공감 취소</button></td>
-        <td ><button v-if="row.editButton" type="button" class="w2-button w3-round w3-blue-gray" v-on:click="fnCmUpdate(row.id, row.content)">수정</button>&nbsp;</td>
-        <td ><button v-if="row.editButton" type="button" class="w2-button w3-round w3-red" v-on:click="fnCmDelete(row.id)">삭제</button>&nbsp;</td>
+        <td v-if="row.editButton"><button type="button" class="w2-button w3-round w3-blue-gray" v-on:click="fnCmUpdate(row.id, row.content)">수정</button>&nbsp;</td>
+        <td v-if="row.editButton"><button type="button" class="w2-button w3-round w3-red" v-on:click="fnCmDelete(row.id)">삭제</button>&nbsp;</td>
 
         <ul v-if="row.replies.length !== 0">
           <tr v-for="(r, i) in row.replies" :key="i">
-            <td @click="reply(row.id)"><span>{{ formatDate(r.createdDate) }}</span></td>
+            <td @click="reply(row.id)"><span>ㄴ {{ formatDate(r.createdDate) }}</span></td>
             <td @click="reply(row.id)">{{ r.name }}</td>
             <td @click="reply(row.id)">{{ r.content }}</td>
             <td @click="reply(row.id)">{{ r.empathyCount }}</td>
