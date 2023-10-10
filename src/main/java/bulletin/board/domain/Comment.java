@@ -22,10 +22,14 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Where(clause = "is_deleted = false")
+@SQLDelete(sql = "UPDATE comment SET is_deleted = true where comment_id = ?")
 public class Comment extends BaseEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,6 +58,8 @@ public class Comment extends BaseEntity {
 	@BatchSize(size = 10)
 	@OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
 	private List<Comment> replies = new ArrayList<>();
+
+	private boolean isDeleted = Boolean.FALSE;
 
 
 	public static Comment create(String content, Post post, Member member) {

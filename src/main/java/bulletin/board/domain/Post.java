@@ -20,10 +20,14 @@ import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Where(clause = "is_deleted = false")
+@SQLDelete(sql = "UPDATE post SET is_deleted = true where post_id = ?")
 public class Post extends BaseEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,6 +49,8 @@ public class Post extends BaseEntity {
 	@BatchSize(size = 10)
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
+
+	private boolean isDeleted = Boolean.FALSE;
 
 	public static Post create(String title, String content, Member member) {
 		Post post = new Post();

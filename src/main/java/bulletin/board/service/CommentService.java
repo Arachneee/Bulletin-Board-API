@@ -1,7 +1,5 @@
 package bulletin.board.service;
 
-import java.util.Comparator;
-import java.util.List;
 
 import bulletin.board.dto.BestCommentResponse;
 import bulletin.board.dto.CommentRequest;

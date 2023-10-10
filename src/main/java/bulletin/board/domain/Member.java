@@ -9,10 +9,14 @@ import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Where(clause = "is_deleted = false")
+@SQLDelete(sql = "UPDATE member SET is_deleted = true where member_id = ?")
 public class Member extends BaseEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +31,8 @@ public class Member extends BaseEntity {
 
 	@Column(nullable = false, length = 30)
 	private String name;
+
+	private boolean isDeleted = Boolean.FALSE;
 
 
 	public static Member create(String loginId, String password, String name) {
