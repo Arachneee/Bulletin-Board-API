@@ -18,6 +18,19 @@
     <div class="board-contents">
       <span>{{ content }}</span>
     </div>
+    <div v-if="bestComment.empathyCount !== 0">
+        <h5>베스트 댓글</h5>
+        <table class="w3-table-all" border="1">
+          <td @click="reply(bestComment.id)"><span>{{ formatDate(bestComment.createdDate) }}</span></td>
+          <td @click="reply(bestComment.id)">{{ bestComment.name }}</td>
+          <td @click="reply(bestComment.id)">{{ bestComment.content }}</td>
+          <td @click="reply(bestComment.id)">{{ bestComment.empathyCount }}</td>
+          <td v-if="bestComment.empathyButton"><button  type="button" class="w2-button w3-round w3-blue" v-on:click="fnCmEmpathy(bestComment.id)">공감</button></td>
+          <td v-if="!bestComment.empathyButton && !bestComment.editButton"><button  type="button" class="w2-button w3-round w3-blue" v-on:click="fnCmEmpathyDelete(bestComment.id)">공감 취소</button></td>
+          <td ><button v-if="bestComment.editButton" type="button" class="w2-button w3-round w3-blue-gray" v-on:click="fnCmUpdate(bestComment.id, bestComment.content)">수정</button>&nbsp;</td>
+          <td ><button v-if="bestComment.editButton" type="button" class="w2-button w3-round w3-red" v-on:click="fnCmDelete(bestComment.id)">삭제</button>&nbsp;</td>
+        </table>
+      </div>
     <h4>댓글</h4>
     <select v-model="commentSort" @change="fnPage(0)">
         <option value="createdDate,desc">- 선택 -</option>
@@ -25,15 +38,15 @@
         <option value="createdDate,asc">오래된순</option>
     </select>
         &nbsp;
-    <div class="w3-table-all">
+    <table class="w3-table-all" border="1">
       <ul class="comment">
       <tr v-for="(row, id) in list" :key="id">
         <td @click="reply(row.id)"><span>{{ formatDate(row.createdDate) }}</span></td>
         <td @click="reply(row.id)">{{ row.name }}</td>
         <td @click="reply(row.id)">{{ row.content }}</td>
         <td @click="reply(row.id)">{{ row.empathyCount }}</td>
-        <td ><button v-if="row.empathyButton" type="button" class="w2-button w3-round w3-blue" v-on:click="fnCmEmpathy(row.id)">공감</button></td>
-        <td ><button v-if="!row.empathyButton && !row.editButton" type="button" class="w2-button w3-round w3-blue" v-on:click="fnCmEmpathyDelete(row.id)">공감 취소</button></td>
+        <td v-if="row.empathyButton"><button  type="button" class="w2-button w3-round w3-blue" v-on:click="fnCmEmpathy(row.id)">공감</button></td>
+        <td v-if="!row.empathyButton && !row.editButton"><button  type="button" class="w2-button w3-round w3-blue" v-on:click="fnCmEmpathyDelete(row.id)">공감 취소</button></td>
         <td ><button v-if="row.editButton" type="button" class="w2-button w3-round w3-blue-gray" v-on:click="fnCmUpdate(row.id, row.content)">수정</button>&nbsp;</td>
         <td ><button v-if="row.editButton" type="button" class="w2-button w3-round w3-red" v-on:click="fnCmDelete(row.id)">삭제</button>&nbsp;</td>
 
@@ -43,8 +56,8 @@
             <td @click="reply(row.id)">{{ r.name }}</td>
             <td @click="reply(row.id)">{{ r.content }}</td>
             <td @click="reply(row.id)">{{ r.empathyCount }}</td>
-            <td ><button v-if="r.empathyButton" type="button" class="w2-button w3-round w3-blue" v-on:click="fnCmEmpathy(r.id)">공감</button></td>
-            <td ><button v-if="!r.empathyButton && !r.editButton" type="button" class="w2-button w3-round w3-blue" v-on:click="fnCmEmpathyDelete(r.id)">공감 취소</button></td>
+            <td v-if="r.empathyButton"><button  type="button" class="w2-button w3-round w3-blue" v-on:click="fnCmEmpathy(r.id)">공감</button></td>
+            <td v-if="!r.empathyButton && !r.editButton"><button  type="button" class="w2-button w3-round w3-blue" v-on:click="fnCmEmpathyDelete(r.id)">공감 취소</button></td>
             <td ><button v-if="r.editButton" type="button" class="w2-button w3-round w3-blue-gray" v-on:click="fnCmUpdate(r.id, r.content)">수정</button>&nbsp;</td>
             <td ><button v-if="r.editButton" type="button" class="w2-button w3-round w3-red" v-on:click="fnCmDelete(r.id)">삭제</button>&nbsp;</td>
           </tr>
@@ -59,7 +72,7 @@
     
       </tr>
     </ul>
-    </div>
+    </table>
 
     <div class="pagination w3-bar w3-padding-16 w3-small">
       <span class="pg">
@@ -113,12 +126,14 @@ export default {
       cmTotalPages: 0,
 
       commentContent: '',
-      replyId: ''
+      replyId: '',
+      bestComment: {}
     }
   },
   mounted() {
     this.fnGetView()
     this.fnCmGetView()
+    this.fnGetBestCmView()
   },
   methods: {
     fnGetView() {
@@ -140,27 +155,37 @@ export default {
       })
     },
     fnCmGetView() {
-    this.cmRequestBody = { // 데이터 전송
-        page: this.commentPage,
-        size: this.commentSize,
-        sort: this.commentSort
-    }
+      this.cmRequestBody = { // 데이터 전송
+          page: this.commentPage,
+          size: this.commentSize,
+          sort: this.commentSort
+      }
 
-    this.$axios.get(this.$serverUrl + '/posts/' + this.idx + '/comments', {
-        params: this.cmRequestBody
-      }).then((res) => {
-        this.list = res.data.content  //서버에서 데이터를 목록으로 보내므로 바로 할당하여 사용할 수 있다.
-        console.log('Detail의 fnGetView 응답' + res.data.number)
-        this.cmNumber = res.data.number
-        this.cmFirst = res.data.first
-        this.cmLast = res.data.last
-        this.cmTotalElements = res.data.totalElements
-        this.cmTotalPages = res.data.totalPages
-      }).catch((err) => {
-        if (err.message.indexOf('Network Error') > -1) {
-        alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
-        }
-      })
+      this.$axios.get(this.$serverUrl + '/posts/' + this.idx + '/comments', {
+          params: this.cmRequestBody
+        }).then((res) => {
+          this.list = res.data.content  //서버에서 데이터를 목록으로 보내므로 바로 할당하여 사용할 수 있다.
+          console.log('Detail의 fnGetView 응답' + res.data.number)
+          this.cmNumber = res.data.number
+          this.cmFirst = res.data.first
+          this.cmLast = res.data.last
+          this.cmTotalElements = res.data.totalElements
+          this.cmTotalPages = res.data.totalPages
+        }).catch((err) => {
+          if (err.message.indexOf('Network Error') > -1) {
+          alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
+          }
+        })
+    },
+    fnGetBestCmView() {
+      this.$axios.get(this.$serverUrl + '/posts/' + this.idx + '/comments/top').then((res) => {
+          console.log("베스트 댓글" + JSON.stringify(res.data))
+          this.bestComment = res.data  
+        }).catch((err) => {
+          if (err.message.indexOf('Network Error') > -1) {
+          alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
+          }
+        })
     },
     fnList() {
       delete this.requestBody.idx
@@ -193,6 +218,7 @@ export default {
         .then(() => {
           alert('공감했습니다.')
           this.fnCmGetView();
+          this.fnGetBestCmView()
         }).catch((err) => {
            console.log(err);
       })
@@ -202,6 +228,7 @@ export default {
         .then(() => {
           alert('공감 취소했습니다.')
           this.fnCmGetView();
+          this.fnGetBestCmView();
         }).catch((err) => {
            console.log(err);
       })
@@ -275,5 +302,4 @@ export default {
   display: flex;
   flex-direction: column;
 }
-
 </style>
