@@ -15,10 +15,16 @@
         <span>작성일 : {{ createdDate }}</span>
       </div>
     </div>
+    <div v-if="imageIds.length !== 0">
+      <div v-for="id in imageIds" :key="id">
+        <img :src="fnImageView(id)" width="400" height="300">
+      </div>
+    </div>
     <div class="board-contents">
       <span>{{ content }}</span>
     </div>
-    <div v-if="bestComment.empathyCount !== 0">
+
+    <div v-if="Object.keys(bestComment).length !== 0 && bestComment.empathyCount !== 0">
         <h5>베스트 댓글</h5>
         <table class="w3-table-all" border="1">
           <td @click="reply(bestComment.id)"><span>{{ formatDate(bestComment.createdDate) }}</span></td>
@@ -112,6 +118,9 @@ export default {
       content: '',
       createdDate: '',
       editButton: false,
+      imageIds: [],
+      image1 : '',
+      image2 : '',
 
       list: {},
 
@@ -133,7 +142,6 @@ export default {
   mounted() {
     this.fnGetView()
     this.fnCmGetView()
-    this.fnGetBestCmView()
   },
   methods: {
     fnGetView() {
@@ -148,6 +156,7 @@ export default {
         this.createdDate = dayjs(res.data.createdDate).format("YYYY-MM-DD hh:ss")
         this.editButton = res.data.editButton
         this.viewCount = res.data.viewCount
+        this.imageIds = res.data.imageIds
       }).catch((err) => {
         if (err.message.indexOf('Network Error') > -1) {
           alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
@@ -171,6 +180,9 @@ export default {
           this.cmLast = res.data.last
           this.cmTotalElements = res.data.totalElements
           this.cmTotalPages = res.data.totalPages
+          if (this.cmTotalElements !== 0) {
+            this.fnGetBestCmView()
+          }
         }).catch((err) => {
           if (err.message.indexOf('Network Error') > -1) {
           alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
@@ -179,13 +191,27 @@ export default {
     },
     fnGetBestCmView() {
       this.$axios.get(this.$serverUrl + '/posts/' + this.idx + '/comments/top').then((res) => {
-          console.log("베스트 댓글" + JSON.stringify(res.data))
-          this.bestComment = res.data  
-        }).catch((err) => {
-          if (err.message.indexOf('Network Error') > -1) {
-          alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
-          }
-        })
+        console.log("베스트 댓글" + JSON.stringify(res.data))
+        this.bestComment = res.data  
+      }).catch((err) => {
+        if (err.message.indexOf('Network Error') > -1) {
+        alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
+        }
+      })
+    },
+    fnImageView(imageId) {
+      return this.$serverUrl + '/posts/' + this.idx + '/images/' + imageId;
+      // this.$axios.get(this.$serverUrl + '/posts/' + this.idx + '/images/' + imageId).then((res) => {
+      //   console.log('fnImageView 응답 ' + imageId)
+      //   this.image1 = 'data:image/jpeg;base64,' + btoa(
+      //       new Uint8Array(res.data)
+      //       .reduce((data, byte) => data + String.fromCharCode(byte), '')
+      //   )
+      // }).catch((err) => {
+      //   if (err.message.indexOf('Network Error') > -1) {
+      //     alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
+      //   }
+      // })
     },
     fnList() {
       delete this.requestBody.idx

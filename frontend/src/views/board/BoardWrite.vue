@@ -2,10 +2,8 @@
   <div class="board-detail">
     <div class="board-contents">
       <input type="text" v-model="title" class="w3-input w3-border" placeholder="제목을 입력해주세요.">
-    </div>
-    <div class="board-contents">
-      <textarea id="" cols="30" rows="10" v-model="content" class="w3-input w3-border" style="resize: none;">
-      </textarea>
+      <input label="File input" name="images" @change="handleFileChange" type="file" multiple accept="image/*" ref="serveyImage">
+      <textarea id="" cols="30" rows="10" v-model="content" class="w3-input w3-border" style="resize: none;"></textarea>
     </div>
     <div class="common-buttons">
       <button type="button" class="w3-button w3-round w3-blue-gray" v-on:click="fnSave">저장</button>&nbsp;
@@ -23,6 +21,7 @@ export default {
 
       title: '',
       content: '',
+      images: '',
     }
   },
   mounted() {
@@ -55,14 +54,22 @@ export default {
       })
     },
     fnSave() {
-      let apiUrl = this.$serverUrl + '/posts'
-      this.form = {
-        "title": this.title,
-        "content": this.content,
+      var formData = new FormData();
+      formData.append('title', this.title)
+      formData.append('content', this.content)
+
+      console.log("이미지 개수 : " + this.images.length)
+      
+      if (this.images.length > -1) {
+        for (let i =0; i < this.images.length; i++) {
+          const imageForm = this.images[i]
+
+          formData.append('images', imageForm)
+        }
       }
 
       if (this.idx === undefined) {
-        this.$axios.post(apiUrl, this.form)
+        this.$axios.post(this.$serverUrl + '/posts', formData)
             .then(() => {
             alert('글이 저장되었습니다.')
             this.fnList()
@@ -73,8 +80,7 @@ export default {
             })
 
       } else {
-        console.log('수정 url=' + apiUrl + ', form=' + this.form)
-        this.$axios.patch(apiUrl + '/' + this.idx, this.form)
+        this.$axios.patch(this.$serverUrl + '/posts' + '/' + this.idx, this.form)
             .then((res) => {
 
             console.log('patch 응답완료' + res.data)
@@ -87,6 +93,9 @@ export default {
             })
       }
 
+    },
+    handleFileChange() {
+      this.images = this.$refs.serveyImage.files
     }
   }
 }

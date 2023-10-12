@@ -16,8 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 
 @Slf4j
@@ -27,10 +31,15 @@ public class PostService {
 
 	private final PostRepository postRepository;
 	private final EntityManager em;
+	private final UploadFileService uploadFileService;
 
 	@Transactional
 	public Long createPost(Member member, PostRequest postRequest) {
+
 		Post savedPost = postRepository.save(Post.create(postRequest.getTitle(), postRequest.getContent(), member));
+
+		uploadFileService.storeFiles(postRequest.getImages(), savedPost);
+
 		return savedPost.getId();
 	}
 
@@ -45,7 +54,7 @@ public class PostService {
 
 	@Transactional
 	public PostDetailResponse findPost(Member member, Long id) {
-		Post post = postRepository.findWithMemberById(id)
+		Post post = postRepository.findWithMemberAndImagesById(id)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.POST_NOT_FOUND));
 
 		post.view();

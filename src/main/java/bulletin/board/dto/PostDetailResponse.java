@@ -1,9 +1,12 @@
 package bulletin.board.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import bulletin.board.domain.Member;
 import bulletin.board.domain.Post;
+import bulletin.board.domain.UploadFile;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,7 +21,7 @@ public class PostDetailResponse {
 	private LocalDateTime createdDate;
 	private Integer viewCount;
 	private boolean editButton;
-
+	private List<Long> imageIds;
 
 	public static PostDetailResponse of(Post post, Member member) {
 		return PostDetailResponse.builder()
@@ -29,6 +32,9 @@ public class PostDetailResponse {
 									.createdDate(post.getCreatedDate())
 									.viewCount(post.getViewCount())
 									.editButton(post.isWriter(member))
+									.imageIds(post.getImages().stream()
+										.map(UploadFile::getId)
+										.collect(Collectors.toList()))
 									.build();
 	}
 }

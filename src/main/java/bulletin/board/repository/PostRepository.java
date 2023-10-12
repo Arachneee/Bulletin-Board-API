@@ -28,8 +28,8 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostQueryDslR
 	Page<Post> findByNameContains(@Param("name") String searchString, Pageable pageable);
 
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
-	@EntityGraph(attributePaths = {"member"})
-	Optional<Post> findWithMemberById(Long id);
+	@EntityGraph(attributePaths = {"member", "images"})
+	Optional<Post> findWithMemberAndImagesById(Long id);
 
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	@EntityGraph(attributePaths = {"comments"})

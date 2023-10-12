@@ -1,4 +1,5 @@
 server.port: 8080
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -14,6 +15,19 @@ spring:
         use_sql_comment: true
         default_batch_fetch_size: 100
     open-in-view: false
+  servlet:
+    multipart:
+      max-request-size: 3MB
+      enabled: true
+  devtools:
+    livereload:
+      enabled: true
+    thymeleaf:
+      cache: false
+    restart:
+      enabled: true
+
+
 server:
   servlet:
     session:

@@ -40,6 +40,10 @@ public class Post extends BaseEntity {
 	@Column(nullable = false, columnDefinition = "MEDIUMTEXT")
 	private String content;
 
+	@BatchSize(size = 10)
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+	private List<UploadFile> images = new ArrayList<>();
+
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "member_id")
 	private Member member;

@@ -20,7 +20,9 @@ public enum ErrorCode {
 	TYPE_MISMATCH(400, "V_002", "입력 타입이 잘못됐습니다."),
 	NOT_JSON(400, "V_003", "JSON 타입에 맞지 않습니다."),
 	DUPLICATED_EMPATHY(400, "EM_001", "이미 공감했습니다."),
-	SELF_EMPATHY(400, "EM_001", "자신의 글에 공감할 수 없습니다.");
+	SELF_EMPATHY(400, "EM_001", "자신의 글에 공감할 수 없습니다."),
+	FILE_NOT_UPLOAD(500, "F_001", "파일을 업로드 할 수 없습니다."),
+	BAD_URL(500, "F_002", "파일 경로가 잘못되었습니다.");
 
 	private final String code;
 	private final String message;
