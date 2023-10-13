@@ -23,7 +23,7 @@
       <tr v-for="(row, id) in list" :key="id">
         <td>{{ row.id }}</td>
         <td>{{ row.viewCount }}</td>
-        <td><a v-on:click="fnView(`${row.id}`)">{{ row.title }}</a></td>
+        <td><a v-on:click="fnView(row.id, id)">{{ row.title }}</a></td>
         <td>{{ row.name }}</td>
         <td>
             <span>{{ formatDate(row.createdDate) }}</span>
@@ -123,8 +123,11 @@ export default {
       // 날짜 데이터를 `YYYY-MM-DD` 형식으로 변환합니다.
       return dayjs(date).format("YYYY-MM-DD hh:ss");
     },
-    fnView(idx) {
+    fnView(idx, id) {
       this.requestBody.idx = idx
+      this.requestBody.previousId = this.idx === 0 ? null : this.list[id - 1]
+      this.requestBody.nextId = this.idx === this.list.size - 1 ? null : this.list[id + 1]
+
       this.$router.push({
         path: './detail',
         query: this.requestBody
