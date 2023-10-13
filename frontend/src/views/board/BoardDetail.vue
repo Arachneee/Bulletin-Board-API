@@ -15,9 +15,9 @@
         <span>작성일 : {{ createdDate }}</span>
       </div>
     </div>
-    <div v-if="imageIds.length !== 0">
-      <div v-for="id in imageIds" :key="id">
-        <img :src="fnImageView(id)" width="400" height="300">
+    <div v-if="imageUrls !== undefined">
+      <div v-for="url in imageUrls" :key="url">
+        <img :src="fnImageView(url)" width="400" height="300">
       </div>
     </div>
     <div class="board-contents">
@@ -118,9 +118,8 @@ export default {
       content: '',
       createdDate: '',
       editButton: false,
-      imageIds: [],
-      image1 : '',
-      image2 : '',
+      imageUrls: [],
+ 
 
       list: {},
 
@@ -156,7 +155,7 @@ export default {
         this.createdDate = dayjs(res.data.createdDate).format("YYYY-MM-DD hh:ss")
         this.editButton = res.data.editButton
         this.viewCount = res.data.viewCount
-        this.imageIds = res.data.imageIds
+        this.imageUrls = res.data.imageUrls
       }).catch((err) => {
         if (err.message.indexOf('Network Error') > -1) {
           alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
@@ -180,6 +179,7 @@ export default {
           this.cmLast = res.data.last
           this.cmTotalElements = res.data.totalElements
           this.cmTotalPages = res.data.totalPages
+
           if (this.cmTotalElements !== 0) {
             this.fnGetBestCmView()
           }
@@ -199,19 +199,8 @@ export default {
         }
       })
     },
-    fnImageView(imageId) {
-      return this.$serverUrl + '/posts/' + this.idx + '/images/' + imageId;
-      // this.$axios.get(this.$serverUrl + '/posts/' + this.idx + '/images/' + imageId).then((res) => {
-      //   console.log('fnImageView 응답 ' + imageId)
-      //   this.image1 = 'data:image/jpeg;base64,' + btoa(
-      //       new Uint8Array(res.data)
-      //       .reduce((data, byte) => data + String.fromCharCode(byte), '')
-      //   )
-      // }).catch((err) => {
-      //   if (err.message.indexOf('Network Error') > -1) {
-      //     alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
-      //   }
-      // })
+    fnImageView(url) {
+      return this.$serverUrl + url;
     },
     fnList() {
       delete this.requestBody.idx
@@ -223,6 +212,8 @@ export default {
     fnUpdate() {
       this.requestBody.title = this.title
       this.requestBody.content = this.content
+      this.requestBody.imageUrls = this.imageUrls
+
       this.$router.push({
         path: './write',
         query: this.requestBody

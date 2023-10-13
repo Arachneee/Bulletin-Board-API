@@ -19,4 +19,6 @@ public class PostRequest {
 	@NotBlank
 	@Size(max = 10000)
 	private String content;
+
+	private List<Long> deleteImageIds;
 }

@@ -21,7 +21,7 @@ public class PostDetailResponse {
 	private LocalDateTime createdDate;
 	private Integer viewCount;
 	private boolean editButton;
-	private List<Long> imageIds;
+	private List<String> imageUrls;
 
 	public static PostDetailResponse of(Post post, Member member) {
 		return PostDetailResponse.builder()
@@ -32,8 +32,8 @@ public class PostDetailResponse {
 									.createdDate(post.getCreatedDate())
 									.viewCount(post.getViewCount())
 									.editButton(post.isWriter(member))
-									.imageIds(post.getImages().stream()
-										.map(UploadFile::getId)
+									.imageUrls(post.getImages().stream()
+										.map(UploadFile::getImageUrl)
 										.collect(Collectors.toList()))
 									.build();
 	}

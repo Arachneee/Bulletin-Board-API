@@ -58,4 +58,7 @@ public class UploadFile extends BaseEntity {
         this.storeFileName = storeFileName;
     }
 
+    public String getImageUrl() {
+        return "/posts/" + getPost().getId() + "/images/" + getId();
+    }
 }

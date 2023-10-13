@@ -2,6 +2,7 @@ package bulletin.board.service;
 
 import bulletin.board.domain.Member;
 import bulletin.board.domain.Post;
+import bulletin.board.domain.UploadFile;
 import bulletin.board.dto.PostRequest;
 import bulletin.board.dto.PostDetailResponse;
 import bulletin.board.dto.PostResponse;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -50,6 +52,10 @@ public class PostService {
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.POST_NOT_FOUND));
 
 		findPost.update(postRequest.getTitle(), postRequest.getContent());
+
+		uploadFileService.deleteFiles(postRequest.getDeleteImageIds());
+
+		uploadFileService.updateFiles(postRequest.getImages(), findPost);
 	}
 
 	@Transactional
@@ -75,6 +81,10 @@ public class PostService {
 	public void deletePost(Long postId) {
 		Post findPost = postRepository.findWithCommentsById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.POST_NOT_FOUND));
+
+		uploadFileService.deleteFiles(findPost.getImages().stream()
+												.map(UploadFile::getId)
+												.collect(Collectors.toList()));
 
 		postRepository.delete(findPost);
 	}

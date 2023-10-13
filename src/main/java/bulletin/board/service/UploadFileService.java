@@ -3,8 +3,14 @@ package bulletin.board.service;
 import bulletin.board.constant.ErrorCode;
 import bulletin.board.domain.Post;
 import bulletin.board.domain.UploadFile;
+import bulletin.board.exceptions.EntityNotFoundException;
 import bulletin.board.exceptions.FileUploadException;
 import bulletin.board.repository.UploadFileRepository;
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.WriteResult;
+import com.google.cloud.storage.Storage;
+import com.google.firebase.cloud.FirestoreClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -72,10 +78,35 @@ public class UploadFileService {
     }
 
     public ByteArrayResource findImage(Long imageId) {
-        UploadFile image = uploadFileRepository.findById(imageId).get();
+        UploadFile image = uploadFileRepository.findById(imageId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.IMAGE_NOT_FOUND));
 
         byte[] content = bucket.get(image.getPath()).getContent();
 
         return new ByteArrayResource(content);
+    }
+
+    @Transactional
+    public void delete(Long imageId) {
+        UploadFile image = uploadFileRepository.findById(imageId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.IMAGE_NOT_FOUND));
+
+        bucket.get(image.getPath()).delete();
+
+        uploadFileRepository.delete(image);
+    }
+
+    @Transactional
+    public void updateFiles(List<MultipartFile> images, Post post) {
+        if (images != null) {
+            storeFiles(images, post);
+        }
+    }
+
+    @Transactional
+    public void deleteFiles(List<Long> deleteImageIds) {
+        if (deleteImageIds != null) {
+            deleteImageIds.forEach(this::delete);
+        }
     }
 }

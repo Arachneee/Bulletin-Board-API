@@ -1,7 +1,6 @@
 package bulletin.board.controller;
 
 import java.net.URI;
-import java.util.List;
 
 import bulletin.board.dto.*;
 import bulletin.board.service.UploadFileService;
@@ -17,8 +16,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import bulletin.board.argumentresolver.Login;
 import bulletin.board.domain.Member;
 import bulletin.board.service.PostService;
@@ -35,7 +32,6 @@ public class PostController {
 	private final PostService postService;
 	private final UploadFileService uploadFileService;
 
-	// @PostMapping(value = "", consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.MULTIPART_FORM_DATA_VALUE})
 	@PostMapping("")
 	public ResponseEntity<Void> createPost(@Login Member member, PostRequest postRequest) {
 		Long postId = postService.createPost(member, postRequest);
@@ -58,24 +54,8 @@ public class PostController {
 		return ResponseEntity.ok().body(post);
 	}
 
-	@GetMapping(value = "/{id}/images/{imageId}")
-	public ResponseEntity<Resource> findImage(@PathVariable Long imageId) {
-
-		ByteArrayResource resource = uploadFileService.findImage(imageId);
-
-		return ResponseEntity.ok()
-							.contentType(MediaType.APPLICATION_OCTET_STREAM)
-							.contentLength(resource.contentLength())
-							.header(HttpHeaders.CONTENT_DISPOSITION,
-								ContentDisposition.attachment()
-									.filename(imageId.toString() + ".jpg")
-									.build().toString())
-							.body(resource);
-	}
-
-
 	@PatchMapping("/{id}")
-	public ResponseEntity<Void> updatePost(@PathVariable("id") Long id, @Valid @RequestBody PostRequest postRequest) {
+	public ResponseEntity<Void> updatePost(@PathVariable("id") Long id, @Valid PostRequest postRequest) {
 		postService.updatePost(id, postRequest);
 
 		return ResponseEntity.ok().build();
@@ -88,5 +68,26 @@ public class PostController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@GetMapping("/{id}/images/{imageId}")
+	public ResponseEntity<Resource> findImage(@PathVariable Long imageId) {
 
+		ByteArrayResource resource = uploadFileService.findImage(imageId);
+
+		return ResponseEntity.ok()
+				.contentType(MediaType.APPLICATION_OCTET_STREAM)
+				.contentLength(resource.contentLength())
+				.header(HttpHeaders.CONTENT_DISPOSITION,
+						ContentDisposition.attachment()
+								.filename(imageId.toString() + ".jpg")
+								.build().toString())
+				.body(resource);
+	}
+
+	@DeleteMapping("/{id}/images/{imageId}")
+	public ResponseEntity<Void> deleteImage(@PathVariable Long imageId) {
+
+		uploadFileService.delete(imageId);
+
+		return ResponseEntity.noContent().build();
+	}
 }
