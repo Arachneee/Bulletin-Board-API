@@ -45,4 +45,4 @@
 
 ### 블로그
 - [다양한 예외를 어떻게 처리할까?](https://velog.io/@jhg2819/Spring-%EB%8B%A4%EC%96%91%ED%95%9C-%EC%98%88%EC%99%B8%EB%A5%BC-%EC%96%B4%EB%96%BB%EA%B2%8C-%EC%B2%98%EB%A6%AC%ED%95%A0%EA%B9%8C)
-- [QueryDSL 리펙토링](https://velog.io/@jhg2819/Spring-%EB%8B%A4%EC%96%91%ED%95%9C-%EC%98%88%EC%99%B8%EB%A5%BC-%EC%96%B4%EB%96%BB%EA%B2%8C-%EC%B2%98%EB%A6%AC%ED%95%A0%EA%B9%8C)
+- [JdbcTemplate부터 QueryDSL까지 리펙토링](https://velog.io/@jhg2819/QueryDSL-JdbcTemplate%EB%B6%80%ED%84%B0-QueryDSL%EA%B9%8C%EC%A7%80-%EB%8F%99%EC%A0%81%EC%BF%BC%EB%A6%AC-%EB%A6%AC%ED%8E%99%ED%86%A0%EB%A7%81%ED%95%98%EA%B8%B0)
