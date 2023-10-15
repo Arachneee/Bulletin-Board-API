@@ -23,7 +23,7 @@
 - Spring Data JPA
 - QueryDsl
 
-###### 프론트엔드
+##### 프론트엔드
 - Vue.js 3.3.4
 
 #### Build Tool
