@@ -22,8 +22,9 @@
 - SpringBoot 3.3.1
 - Spring Data JPA
 - QueryDsl
+
 ###### 프론트엔드
-- Vue
+- Vue.js 3.3.4
 
 #### Build Tool
 - Gradle 8.2.1
