@@ -36,4 +36,8 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostQueryDslR
 	Optional<Post> findWithCommentsById(Long id);
 
 	Boolean existsByIdAndMember(Long id, Member member);
+
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
+	@EntityGraph(attributePaths = {"postEmpathies"})
+    Optional<Post> findWithEmpathyById(Long id);
 }

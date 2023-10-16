@@ -1,28 +1,20 @@
 package bulletin.board.domain;
 
-import static jakarta.persistence.FetchType.*;
+import bulletin.board.constant.ErrorCode;
+import bulletin.board.exceptions.DuplicatedEmpathyException;
+import bulletin.board.exceptions.SelfEmpathyException;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.annotations.BatchSize;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
-import org.springframework.web.multipart.MultipartFile;
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -54,6 +46,9 @@ public class Post extends BaseEntity {
 	@BatchSize(size = 10)
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<>();
+
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+	private List<PostEmpathy> postEmpathies = new ArrayList<>();
 
 	private boolean isDeleted = Boolean.FALSE;
 
@@ -100,4 +95,43 @@ public class Post extends BaseEntity {
 	public String getWriterName() {
 		return member.getName();
 	}
+
+	public Integer getEmpathyCount() {
+		return postEmpathies.size();
+	}
+
+	public void addEmpathy(PostEmpathy postEmpathy) {
+		validateCommentEmpathy(postEmpathy.getMember());
+		postEmpathies.add(postEmpathy);
+	}
+
+	private void validateCommentEmpathy(Member empathyMember) {
+		validateWriter(empathyMember);
+		validateAlreadyEmpathized(empathyMember);
+	}
+
+	public void validateWriter(Member member) {
+		if (isWriter(member)) {
+			throw new SelfEmpathyException(ErrorCode.SELF_EMPATHY);
+		}
+	}
+
+	public void validateAlreadyEmpathized(Member member) {
+		if (isAlreadyEmpathized(member)) {
+			throw new DuplicatedEmpathyException(ErrorCode.DUPLICATED_EMPATHY);
+		}
+	}
+
+	public boolean isAlreadyEmpathized(Member member) {
+		return postEmpathies.stream()
+				.map(PostEmpathy::getMemberId)
+				.toList()
+				.contains(member.getId());
+	}
+
+	public boolean canEmpathy(Member member) {
+		return !(isAlreadyEmpathized(member) || isWriter(member));
+	}
+
+
 }

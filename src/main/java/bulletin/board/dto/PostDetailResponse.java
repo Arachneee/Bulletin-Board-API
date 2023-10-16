@@ -20,7 +20,9 @@ public class PostDetailResponse {
 	private String name;
 	private LocalDateTime createdDate;
 	private Integer viewCount;
+	private Integer empathyCount;
 	private boolean editButton;
+	private boolean empathyButton;
 	private List<String> imageUrls;
 
 	public static PostDetailResponse of(Post post, Member member) {
@@ -31,7 +33,9 @@ public class PostDetailResponse {
 									.name(post.getWriterName())
 									.createdDate(post.getCreatedDate())
 									.viewCount(post.getViewCount())
+									.empathyCount(post.getEmpathyCount())
 									.editButton(post.isWriter(member))
+									.empathyButton(post.canEmpathy(member))
 									.imageUrls(post.getImages().stream()
 										.map(UploadFile::getImageUrl)
 										.collect(Collectors.toList()))

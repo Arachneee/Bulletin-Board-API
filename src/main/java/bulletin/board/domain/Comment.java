@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bulletin.board.constant.ErrorCode;
-import bulletin.board.exceptions.DuplicatedCommentEmpathyException;
+import bulletin.board.exceptions.DuplicatedEmpathyException;
 import bulletin.board.exceptions.SelfEmpathyException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -125,7 +125,7 @@ public class Comment extends BaseEntity {
 
 	public void validateAlreadyEmpathized(Member member) {
 		if (isAlreadyEmpathized(member)) {
-			throw new DuplicatedCommentEmpathyException(ErrorCode.DUPLICATED_EMPATHY);
+			throw new DuplicatedEmpathyException(ErrorCode.DUPLICATED_EMPATHY);
 		}
 	}
 

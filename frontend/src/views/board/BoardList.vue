@@ -17,17 +17,19 @@
         <th>제목</th>
         <th>작성자</th>
         <th>등록일시</th>
+        <th>추천수</th>
       </tr>
       </thead>
       <tbody>
       <tr v-for="(row, id) in list" :key="id">
         <td>{{ row.id }}</td>
         <td>{{ row.viewCount }}</td>
-        <td><a v-on:click="fnView(row.id, id)">{{ row.title }}</a></td>
+        <td><a v-on:click="fnView(row.id)">{{ row.title }}</a></td>
         <td>{{ row.name }}</td>
         <td>
             <span>{{ formatDate(row.createdDate) }}</span>
         </td>
+        <td>{{ row.empathyCount }}</td>
       </tr>
       </tbody>
     </table>
@@ -65,10 +67,10 @@
 import dayjs from "dayjs";
 
 export default {
-  data() { //변수생성
+  data() { 
     return {
-      requestBody: {}, //리스트 페이지 데이터전송
-      list: {}, //리스트 데이터
+      requestBody: {}, 
+      list: {}, 
 
       page: this.$route.query.page ? this.$route.query.page : 0,
       size: this.$route.query.size ? this.$route.query.size : 10,
@@ -90,7 +92,7 @@ export default {
   },
   methods: {
     fnGetList() {
-      this.requestBody = { // 데이터 전송
+      this.requestBody = { 
         searchCode: this.searchCode,
         searchString: this.searchString,
         page: this.page,
@@ -105,7 +107,7 @@ export default {
         headers: {}
       }).then((res) => {
 
-        this.list = res.data.content  //서버에서 데이터를 목록으로 보내므로 바로 할당하여 사용할 수 있다.
+        this.list = res.data.content 
         this.number = res.data.number
         this.first = res.data.first
         this.last = res.data.last
@@ -120,13 +122,10 @@ export default {
       })
     },
     formatDate(date) {
-      // 날짜 데이터를 `YYYY-MM-DD` 형식으로 변환합니다.
       return dayjs(date).format("YYYY-MM-DD hh:ss");
     },
-    fnView(idx, id) {
+    fnView(idx) {
       this.requestBody.idx = idx
-      this.requestBody.previousId = this.idx === 0 ? null : this.list[id - 1]
-      this.requestBody.nextId = this.idx === this.list.size - 1 ? null : this.list[id + 1]
 
       this.$router.push({
         path: './detail',

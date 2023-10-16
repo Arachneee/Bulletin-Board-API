@@ -15,6 +15,7 @@ public class PostResponse {
 	private String name;
 	private LocalDateTime createdDate;
 	private Integer viewCount;
+	private Integer empathyCount;
 
 
 	public static PostResponse of(Post post) {
@@ -24,6 +25,7 @@ public class PostResponse {
 							.name(post.getWriterName())
 							.createdDate(post.getCreatedDate())
 							.viewCount(post.getViewCount())
+							.empathyCount(post.getEmpathyCount())
 							.build();
 
 	}

@@ -23,6 +23,9 @@
     <div class="board-contents">
       <span>{{ content }}</span>
     </div>
+    <h3>추천수 : {{ empathyCount }}</h3>&nbsp;
+    <button v-if="empathyButton" type="button" class="w3-button w3-round w3-blue" v-on:click="fnPostEmpathy">추천</button>
+    <button v-if="!empathyButton && !editButton" type="button" class="w3-button w3-round w3-red" v-on:click="fnPostEmpathyDelete">추천 취소</button>
 
     <div v-if="Object.keys(bestComment).length !== 0 && bestComment.empathyCount !== 0">
         <h5>베스트 댓글</h5>
@@ -106,18 +109,21 @@
 import dayjs from "dayjs";
 
 export default {
-  data() { //변수생성
+  data() { 
     return {
       requestBody: this.$route.query,
       idx: this.$route.query.idx,
+
       cmRequestBody: {},
 
       title: '',
       name: '',
       viewCount: 0,
+      empathyCount: 0,
       content: '',
       createdDate: '',
       editButton: false,
+      empathyButton: false,
       imageUrls: [],
  
 
@@ -154,6 +160,8 @@ export default {
         this.content = res.data.content
         this.createdDate = dayjs(res.data.createdDate).format("YYYY-MM-DD hh:ss")
         this.editButton = res.data.editButton
+        this.empathyButton = res.data.empathyButton
+        this.empathyCount = res.data.empathyCount
         this.viewCount = res.data.viewCount
         this.imageUrls = res.data.imageUrls
       }).catch((err) => {
@@ -163,7 +171,7 @@ export default {
       })
     },
     fnCmGetView() {
-      this.cmRequestBody = { // 데이터 전송
+      this.cmRequestBody = { 
           page: this.commentPage,
           size: this.commentSize,
           sort: this.commentSort
@@ -172,7 +180,7 @@ export default {
       this.$axios.get(this.$serverUrl + '/posts/' + this.idx + '/comments', {
           params: this.cmRequestBody
         }).then((res) => {
-          this.list = res.data.content  //서버에서 데이터를 목록으로 보내므로 바로 할당하여 사용할 수 있다.
+          this.list = res.data.content  
           console.log('Detail의 fnGetView 응답' + res.data.number)
           this.cmNumber = res.data.number
           this.cmFirst = res.data.first
@@ -230,6 +238,24 @@ export default {
         console.log(err);
       })
     },
+    fnPostEmpathy() {
+      this.$axios.post(this.$serverUrl + '/posts/' + this.idx + '/empathy', {})
+        .then(() => {
+          alert('공감했습니다.')
+          this.fnGetView();
+        }).catch((err) => {
+           console.log(err);
+      })
+    },
+    fnPostEmpathyDelete() {
+      this.$axios.delete(this.$serverUrl + '/posts/' + this.idx + '/empathy', {})
+        .then(() => {
+          alert('공감 취소했습니다.')
+          this.fnGetView();
+        }).catch((err) => {
+           console.log(err);
+      })
+    },
     fnCmEmpathy(id) {
       this.$axios.post(this.$serverUrl + '/posts/' + this.idx + '/comments/' + id + '/empathy', {})
         .then(() => {
@@ -251,7 +277,7 @@ export default {
       })
     },
     fnCmSave() {
-      this.cmRequestBody = { // 데이터 전송
+      this.cmRequestBody = {
         commentContent: this.commentContent,
       }
 
@@ -286,7 +312,6 @@ export default {
     },
 
     formatDate(date) {
-      // 날짜 데이터를 `YYYY-MM-DD` 형식으로 변환합니다.
       return dayjs(date).format("YYYY-MM-DD hh:ss");
     },
     fnPage(n) {
@@ -298,7 +323,7 @@ export default {
       this.replyId = this.reply === id ? 0 : id
     },
     fnReplySave(id) {
-      this.cmRequestBody = { // 데이터 전송
+      this.cmRequestBody = { 
         commentContent: this.commentContent,
       }
 
