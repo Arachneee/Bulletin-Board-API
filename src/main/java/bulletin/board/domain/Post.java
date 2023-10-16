@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -49,6 +50,9 @@ public class Post extends BaseEntity {
 
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
 	private List<PostEmpathy> postEmpathies = new ArrayList<>();
+
+	@Formula("(select count(*) from post_empathy where post_empathy.post_id=post_id)")
+	private int empathiesCount;
 
 	private boolean isDeleted = Boolean.FALSE;
 

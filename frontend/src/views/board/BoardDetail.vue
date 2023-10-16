@@ -45,6 +45,7 @@
         <option value="">- 선택 -</option>
         <option value="createdDate,desc">최신순</option>
         <option value="createdDate,asc">오래된순</option>
+        <option value="empathiesCount,desc">추천순</option>
     </select>
         &nbsp;
     <table class="w3-table-all" border="1">

@@ -6,6 +6,10 @@ import static bulletin.board.domain.QPost.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import bulletin.board.domain.QPost;
+import com.querydsl.core.Tuple;
+import com.querydsl.jpa.JPAExpressions;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,6 +25,7 @@ import bulletin.board.constant.SearchCode;
 import bulletin.board.domain.Post;
 import jakarta.persistence.EntityManager;
 
+@Slf4j
 public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
 
 	private final JPAQueryFactory queryFactory;
@@ -31,7 +36,9 @@ public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
 
 	@Override
 	public Page<Post> searchPosts(SearchCode searchCode, String searchString, Pageable pageable) {
-		List<Post> content = queryFactory
+		QPost postSub = new QPost("postSub");
+
+		List<Post> contents = queryFactory
 			.selectFrom(post)
 			.where(searchCode.getColumn().contains(searchString))
 			.leftJoin(post.member, member).fetchJoin()
@@ -44,7 +51,7 @@ public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
 			.selectFrom(post)
 			.where(searchCode.getColumn().contains(searchString));
 
-		return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
+		return PageableExecutionUtils.getPage(contents,	pageable, countQuery::fetchCount);
 
 	}
 
@@ -55,6 +62,8 @@ public class PostQueryDslRepositoryImpl implements PostQueryDslRepository {
 	}
 
 	private static OrderSpecifier getOrderSpecifier(Sort.Order order) {
+		log.info("ORDER : {}, {}",getDirection(order), getPathBuilder(order));
+
 		return new OrderSpecifier(getDirection(order), getPathBuilder(order));
 	}
 
