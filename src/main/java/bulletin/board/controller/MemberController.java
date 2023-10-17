@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/members")
 public class MemberController {
+
 	private final MemberService memberService;
 
 	@PostMapping("")

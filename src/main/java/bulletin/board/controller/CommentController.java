@@ -1,7 +1,6 @@
 package bulletin.board.controller;
 
 import java.net.URI;
-import java.util.Map;
 
 import bulletin.board.dto.BestCommentResponse;
 import bulletin.board.dto.CommentRequest;
