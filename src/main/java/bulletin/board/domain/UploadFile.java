@@ -23,6 +23,7 @@ public class UploadFile extends BaseEntity {
     private Post post;
 
     @NotEmpty
+    @Column(nullable = false, length = 100)
     private String uploadFileName;
 
     @NotEmpty
