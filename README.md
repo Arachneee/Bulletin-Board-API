@@ -32,9 +32,6 @@
 #### DataBase
 - MySQL 8.0.34
 
-### API 명세
-![api](https://github.com/Arachneee/Bulletin-Board-API/blob/master/doc/api-doc.html)
-
 ### DB 설계
 ![erd](https://github.com/Arachneee/Bulletin-Board-API/assets/66822642/9241c880-9147-48e5-91d4-41810aaf67b1)
 
