@@ -32,6 +32,9 @@
 #### DataBase
 - MySQL 8.0.34
 
+### 2. DB 설계
+![erd](https://github.com/Arachneee/Bulletin-Board-API/assets/66822642/9241c880-9147-48e5-91d4-41810aaf67b1)
+
 ### ToDo
 - ~~QueryDsl 도입~~
 - ~~대댓글 기능 추가~~
@@ -42,6 +45,7 @@
 - 로그처리 AOP 설계
 - MyPage, ID/PW 찾기
 - 쪽지보내기 기능 추가
+- Spring Rest Doc 도입
 
 ### 블로그
 - [다양한 예외를 어떻게 처리할까?](https://velog.io/@jhg2819/Spring-%EB%8B%A4%EC%96%91%ED%95%9C-%EC%98%88%EC%99%B8%EB%A5%BC-%EC%96%B4%EB%96%BB%EA%B2%8C-%EC%B2%98%EB%A6%AC%ED%95%A0%EA%B9%8C)
