@@ -1,4 +1,4 @@
-package bulletin.board.service.config;
+package bulletin.board.config;
 
 import java.util.List;
 

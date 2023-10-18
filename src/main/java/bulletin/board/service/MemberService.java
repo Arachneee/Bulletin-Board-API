@@ -21,6 +21,7 @@ public class MemberService {
 
 	private final MemberRepository memberRepository;
 
+	@Transactional
 	public Long createMember(MemberRequest memberRequest) {
 		validateMemberRequest(memberRequest);
 		Member savedMember = saveMember(memberRequest);
@@ -45,8 +46,6 @@ public class MemberService {
 		}
 	}
 
-
-	@Transactional
 	private Member saveMember(MemberRequest memberRequest) {
 		return memberRepository.save(Member.create(memberRequest.getLoginId(), memberRequest.getPassword(), memberRequest.getName()));
 	}

@@ -55,7 +55,7 @@ public class MemberController {
 
 	@PostMapping("/name")
 	public ResponseEntity<Void> checkName(@RequestBody Map<String, String>  nameMap) {
-		memberService.validateLoginId(nameMap.get("name"));
+		memberService.validateName(nameMap.get("name"));
 
 		return ResponseEntity.ok().build();
 	}
