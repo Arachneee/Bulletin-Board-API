@@ -1,12 +1,7 @@
 package bulletin.board.domain.post.repository;
 
-
 import java.util.Optional;
 
-import bulletin.board.domain.member.Member;
-import bulletin.board.domain.post.Post;
-import bulletin.board.domain.post.repository.PostQueryDslRepository;
-import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -14,6 +9,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import bulletin.board.domain.member.Member;
+import bulletin.board.domain.post.Post;
+import jakarta.persistence.LockModeType;
 
 public interface PostRepository extends JpaRepository<Post, Long>, PostQueryDslRepository {
 

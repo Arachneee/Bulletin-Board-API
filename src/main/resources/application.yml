@@ -1,11 +1,21 @@
 server.port: 8080
 
 spring:
+  profiles:
+    default: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/board?serverTimezone=Asia/Seoul
     username: root
     password: 1234
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -15,10 +25,12 @@ spring:
         use_sql_comment: true
         default_batch_fetch_size: 100
     open-in-view: false
+
   servlet:
     multipart:
       max-request-size: 3MB
       enabled: true
+
   devtools:
     livereload:
       enabled: true
@@ -26,7 +38,6 @@ spring:
       cache: false
     restart:
       enabled: true
-
 
 server:
   servlet:
@@ -36,3 +47,27 @@ server:
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.orm.jdbc.bind: trace
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  datasource:
+    url: jdbc:h2:mem:~/board
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  sql:
+    init:
+      mode: never
