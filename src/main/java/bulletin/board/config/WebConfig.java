@@ -8,10 +8,9 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import bulletin.board.argumentresolver.LoginMemberArgumentResolver;
-import bulletin.board.interceptor.AuthorityInterceptor;
-import bulletin.board.repository.CommentRepository;
-import bulletin.board.repository.PostRepository;
+import bulletin.board.api.service.login.LoginMemberArgumentResolver;
+import bulletin.board.domain.comment.repository.CommentRepository;
+import bulletin.board.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
