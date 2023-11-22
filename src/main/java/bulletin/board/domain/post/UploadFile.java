@@ -33,7 +33,7 @@ public class UploadFile extends BaseEntity {
     @NotEmpty
     private String path;
 
-    public static UploadFile create(String uploadFileName, String storeFileName, String path, Post post) {
+    public static UploadFile create(final String uploadFileName, final String storeFileName, final String path, final Post post) {
         UploadFile uploadFile = new UploadFile();
         uploadFile.setStoreFileName(storeFileName);
         uploadFile.setUploadFileName(uploadFileName);
@@ -43,9 +43,9 @@ public class UploadFile extends BaseEntity {
         return uploadFile;
     }
 
-    private void setPost(Post post) {
+    private void setPost(final Post post) {
         this.post = post;
-        post.getImages().add(this);
+        post.addImage(this);
     }
 
     private void setPath(String path) {

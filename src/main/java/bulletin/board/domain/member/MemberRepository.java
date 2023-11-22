@@ -1,15 +1,13 @@
 package bulletin.board.domain.member;
 
-import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import bulletin.board.domain.member.Member;
+import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-	Optional<Member> findByLoginIdAndPassword(String loginId, String password);
+	Optional<Member> findByLoginIdAndPassword(final String loginId, final String password);
 
-	Boolean existsByLoginId(String loginId);
+	Boolean existsByLoginId(final String loginId);
 
-	Boolean existsByName(String name);
+	Boolean existsByName(final String name);
 }

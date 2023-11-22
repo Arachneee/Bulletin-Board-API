@@ -1,7 +1,9 @@
 package bulletin.board.api;
 
-import java.net.URI;
-
+import bulletin.board.exceptions.AuthorityException;
+import bulletin.board.exceptions.BusinessException;
+import bulletin.board.exceptions.LoginFailException;
+import bulletin.board.exceptions.constant.ErrorCode;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import bulletin.board.exceptions.AuthorityException;
-import bulletin.board.exceptions.BusinessException;
-import bulletin.board.exceptions.constant.ErrorCode;
-import bulletin.board.exceptions.LoginFailException;
+import java.net.URI;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -23,7 +22,7 @@ public class GlobalExceptionHandler {
 	@Order(1)
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
-		ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.METHOD_NOT_ALLOWED);
+		ErrorResponse errorResponse = ErrorResponse.from(ErrorCode.METHOD_NOT_ALLOWED);
 		return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(errorResponse);
 	}
 
@@ -31,7 +30,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(LoginFailException.class)
 	protected ResponseEntity<ErrorResponse> handleAuthorityException(LoginFailException e) {
 		ErrorCode errorCode = e.getErrorCode();
-		ErrorResponse errorResponse = ErrorResponse.of(errorCode);
+		ErrorResponse errorResponse = ErrorResponse.from(errorCode);
 		return ResponseEntity.status(errorCode.getStatus()).location(URI.create("/members")).body(errorResponse);
 	}
 
@@ -39,21 +38,21 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(AuthorityException.class)
 	protected ResponseEntity<ErrorResponse> handleAuthorityException(AuthorityException e) {
 		ErrorCode errorCode = e.getErrorCode();
-		ErrorResponse errorResponse = ErrorResponse.of(errorCode);
+		ErrorResponse errorResponse = ErrorResponse.from(errorCode);
 		return ResponseEntity.status(errorCode.getStatus()).location(URI.create("/login")).body(errorResponse);
 	}
 
 	@Order(4)
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(HttpMessageNotReadableException e) {
-		ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.NOT_JSON);
+		ErrorResponse errorResponse = ErrorResponse.from(ErrorCode.NOT_JSON);
 		return ResponseEntity.badRequest().body(errorResponse);
 	}
 
 	@Order(5)
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
 	protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
-		ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.TYPE_MISMATCH);
+		ErrorResponse errorResponse = ErrorResponse.from(ErrorCode.TYPE_MISMATCH);
 		return ResponseEntity.badRequest().body(errorResponse);
 	}
 
@@ -68,14 +67,14 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(BusinessException.class)
 	protected ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
 		ErrorCode errorCode = e.getErrorCode();
-		ErrorResponse errorResponse = ErrorResponse.of(errorCode);
+		ErrorResponse errorResponse = ErrorResponse.from(errorCode);
 		return ResponseEntity.status(errorCode.getStatus()).body(errorResponse);
 	}
 
 	@Order(8)
 	@ExceptionHandler(Exception.class)
 	protected ResponseEntity<ErrorResponse> handleException(Exception e) {
-		ErrorResponse errorResponse = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
+		ErrorResponse errorResponse = ErrorResponse.from(ErrorCode.INTERNAL_SERVER_ERROR);
 		return ResponseEntity.internalServerError().body(errorResponse);
 	}
 }

@@ -59,7 +59,7 @@ public class Post extends BaseEntity {
 
 	private boolean isDeleted = Boolean.FALSE;
 
-	public static Post create(String title, String content, Member member) {
+	public static Post create(final String title, final String content, final Member member) {
 		Post post = new Post();
 
 		post.setTitle(title);
@@ -68,6 +68,63 @@ public class Post extends BaseEntity {
 		post.setViewCount(0);
 
 		return post;
+	}
+
+	public void view() {
+		++viewCount;
+	}
+
+	public void update(final String title, final String content) {
+		setTitle(title);
+		setContent(content);
+	}
+
+	public void addComment(final Comment comment) {
+		comments.add(comment);
+	}
+
+	public void addImage(final UploadFile uploadFile) {
+		images.add(uploadFile);
+	}
+
+	public void addEmpathy(final PostEmpathy postEmpathy) {
+		validateCommentEmpathy(postEmpathy);
+		postEmpathies.add(postEmpathy);
+	}
+
+	private void validateCommentEmpathy(final PostEmpathy postEmpathy) {
+		validateWriter(postEmpathy);
+		validateAlreadyEmpathized(postEmpathy);
+	}
+
+	public void validateWriter(final PostEmpathy postEmpathy) {
+		if (postEmpathy.isWriter(member)) {
+			throw new SelfEmpathyException(ErrorCode.SELF_EMPATHY);
+		}
+	}
+
+	public void validateAlreadyEmpathized(final PostEmpathy postEmpathy) {
+		if (isAlreadyEmpathized(postEmpathy)) {
+			throw new DuplicatedEmpathyException(ErrorCode.DUPLICATED_EMPATHY);
+		}
+	}
+
+	public boolean isAlreadyEmpathized(final PostEmpathy postEmpathy) {
+		return postEmpathies.stream()
+				.anyMatch(postEmpathy::equals);
+	}
+
+	public boolean isAlreadyEmpathized(final Member member) {
+		return postEmpathies.stream()
+				.anyMatch(empathy -> empathy.isWriter(member));
+	}
+
+	public boolean canEmpathy(final Member member) {
+		return !(isAlreadyEmpathized(member) || isWriter(member));
+	}
+
+	public boolean isWriter(final Member member) {
+		return this.member.equals(member);
 	}
 
 	private void setTitle(String title) {
@@ -86,19 +143,6 @@ public class Post extends BaseEntity {
 		this.viewCount = viewCount;
 	}
 
-	public void view() {
-		++viewCount;
-	}
-
-	public void update(String title, String content) {
-		setTitle(title);
-		setContent(content);
-	}
-
-	public boolean isWriter(Member member) {
-		return this.member.getId().equals(member.getId());
-	}
-
 	public String getWriterName() {
 		return member.getName();
 	}
@@ -107,38 +151,9 @@ public class Post extends BaseEntity {
 		return postEmpathies.size();
 	}
 
-	public void addEmpathy(PostEmpathy postEmpathy) {
-		validateCommentEmpathy(postEmpathy.getMember());
-		postEmpathies.add(postEmpathy);
+	public List<Long> getImageIds() {
+		return images.stream()
+				.map(UploadFile::getId)
+				.toList();
 	}
-
-	private void validateCommentEmpathy(Member empathyMember) {
-		validateWriter(empathyMember);
-		validateAlreadyEmpathized(empathyMember);
-	}
-
-	public void validateWriter(Member member) {
-		if (isWriter(member)) {
-			throw new SelfEmpathyException(ErrorCode.SELF_EMPATHY);
-		}
-	}
-
-	public void validateAlreadyEmpathized(Member member) {
-		if (isAlreadyEmpathized(member)) {
-			throw new DuplicatedEmpathyException(ErrorCode.DUPLICATED_EMPATHY);
-		}
-	}
-
-	public boolean isAlreadyEmpathized(Member member) {
-		return postEmpathies.stream()
-				.map(PostEmpathy::getMemberId)
-				.toList()
-				.contains(member.getId());
-	}
-
-	public boolean canEmpathy(Member member) {
-		return !(isAlreadyEmpathized(member) || isWriter(member));
-	}
-
-
 }

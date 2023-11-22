@@ -19,17 +19,17 @@ public class PostEmpathyService {
     private final PostRepository postRepository;
 
     @Transactional
-    public void createPostEmpathy(Member member, Long postId) {
-        Post findPost = postRepository.findWithEmpathyById(postId)
+    public void create(final Member member, final Long postId) {
+        final Post findPost = postRepository.findWithEmpathyById(postId)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.POST_NOT_FOUND));
 
-        PostEmpathy postEmpathy = PostEmpathy.create(findPost, member);
+        final PostEmpathy postEmpathy = PostEmpathy.create(findPost, member);
         postEmpathyRepository.save(postEmpathy);
     }
 
     @Transactional
-    public void deletePostEmpathy(Member member, Long postId) {
-        PostEmpathy postEmpathy = postEmpathyRepository.findByMemberAndPostId(member, postId)
+    public void delete(final Member member, final Long postId) {
+        final PostEmpathy postEmpathy = postEmpathyRepository.findByMemberAndPostId(member, postId)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.EMPATHY_NOT_FOUND));
 
         postEmpathyRepository.delete(postEmpathy);

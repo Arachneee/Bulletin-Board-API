@@ -1,11 +1,11 @@
 package bulletin.board.api.service.comment.response;
 
-import java.time.LocalDateTime;
-
 import bulletin.board.domain.comment.Comment;
 import bulletin.board.domain.member.Member;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -19,7 +19,7 @@ public class BestCommentResponse {
 	private boolean editButton;
 	private boolean empathyButton;
 
-	public static BestCommentResponse of(Comment comment, Member member) {
+	public static BestCommentResponse of(final Comment comment, final Member member) {
 		return BestCommentResponse.builder()
 			.id(comment.getId())
 			.content(comment.getContent())

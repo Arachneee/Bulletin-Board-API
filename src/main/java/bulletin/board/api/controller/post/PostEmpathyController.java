@@ -17,14 +17,14 @@ public class PostEmpathyController {
     @PostMapping("")
     public ResponseEntity<Void> createPostEmpathy(@Login Member member,
                                                      @PathVariable Long postId) {
-        postEmpathyService.createPostEmpathy(member, postId);
+        postEmpathyService.create(member, postId);
 
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("")
     public ResponseEntity<Void> deletePostEmpathy(@Login Member member, @PathVariable Long postId) {
-        postEmpathyService.deletePostEmpathy(member, postId);
+        postEmpathyService.delete(member, postId);
 
         return ResponseEntity.noContent().build();
     }

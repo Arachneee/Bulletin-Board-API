@@ -12,7 +12,7 @@ public class MemberResponse {
 	private String longId;
 	private String name;
 
-	public static MemberResponse of(Member member) {
+	public static MemberResponse from(final Member member) {
 		return MemberResponse.builder()
 								.id(member.getId())
 								.longId(member.getLoginId())

@@ -20,17 +20,17 @@ public class CommentEmpathyService {
 	private final CommentRepository commentRepository;
 
 	@Transactional
-	public void createCommentEmpathy(Member member, Long commentId) {
-		Comment findComment = commentRepository.findWithEmpathyById(commentId)
+	public void create(final Member member, final Long commentId) {
+		final Comment findComment = commentRepository.findWithEmpathyById(commentId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.COMMENT_NOT_FOUND));
 
-		CommentEmpathy commentEmpathy = CommentEmpathy.create(findComment, member);
+		final CommentEmpathy commentEmpathy = CommentEmpathy.create(findComment, member);
 		commentEmpathyRepository.save(commentEmpathy);
 	}
 
 	@Transactional
-	public void deleteCommentEmpathy(Member member, Long commentId) {
-		CommentEmpathy commentEmpathy = commentEmpathyRepository.findByMemberAndCommentId(member, commentId)
+	public void delete(final Member member, final Long commentId) {
+		final CommentEmpathy commentEmpathy = commentEmpathyRepository.findByMemberAndCommentId(member, commentId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.EMPATHY_NOT_FOUND));
 
 		commentEmpathyRepository.delete(commentEmpathy);

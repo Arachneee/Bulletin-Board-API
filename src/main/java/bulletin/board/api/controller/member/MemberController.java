@@ -22,14 +22,14 @@ public class MemberController {
 
 	@PostMapping("")
 	public ResponseEntity<Void> createMember(@Valid @RequestBody MemberRequest memberRequest) {
-		Long saveId = memberService.createMember(memberRequest);
+		Long saveId = memberService.create(memberRequest);
 
 		return ResponseEntity.created(URI.create("/members/" + saveId)).build();
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<MemberResponse> findMember(@PathVariable("id") Long id) {
-		return ResponseEntity.ok().body(memberService.findMember(id));
+		return ResponseEntity.ok().body(memberService.findById(id));
 	}
 
 	@PatchMapping("/{id}")
@@ -41,7 +41,7 @@ public class MemberController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteMember(@PathVariable("id") Long id) {
-		memberService.deleteMember(id);
+		memberService.delete(id);
 
 		return ResponseEntity.noContent().build();
 	}

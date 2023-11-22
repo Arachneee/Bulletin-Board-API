@@ -1,17 +1,16 @@
 package bulletin.board.config;
 
-import java.util.List;
-
+import bulletin.board.api.service.login.LoginMemberArgumentResolver;
+import bulletin.board.domain.comment.repository.CommentRepository;
+import bulletin.board.domain.post.repository.PostRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import bulletin.board.api.service.login.LoginMemberArgumentResolver;
-import bulletin.board.domain.comment.repository.CommentRepository;
-import bulletin.board.domain.post.repository.PostRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
@@ -23,19 +22,19 @@ public class WebConfig implements WebMvcConfigurer {
     private static final long MAX_AGE_SECS = 3600;
 
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {
+    public void addInterceptors(final InterceptorRegistry registry) {
 //        registry.addInterceptor(new AuthorityInterceptor(postRepository, commentRepository))
 //                .addPathPatterns("/**")
 //                .excludePathPatterns("/", "/members", "/login", "/posts", "/css/**", "/*.ico", "/error/**", "/vue/**");
     }
 
     @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+    public void addArgumentResolvers(final List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(new LoginMemberArgumentResolver());
     }
 
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
+    public void addCorsMappings(final CorsRegistry registry) {
         registry.addMapping("/**")
             .allowedOrigins("*")
             .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE")

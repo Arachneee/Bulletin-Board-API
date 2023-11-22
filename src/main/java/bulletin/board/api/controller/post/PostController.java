@@ -37,7 +37,7 @@ public class PostController {
 
 	@PostMapping("")
 	public ResponseEntity<Void> createPost(@Login Member member, PostRequest postRequest) {
-		Long postId = postService.createPost(member, postRequest);
+		Long postId = postService.create(member, postRequest);
 
 		return ResponseEntity.created(URI.create("/posts/" + postId)).build();
 	}
@@ -59,14 +59,14 @@ public class PostController {
 
 	@PatchMapping("/{id}")
 	public ResponseEntity<Void> updatePost(@PathVariable("id") Long id, @Valid PostRequest postRequest) {
-		postService.updatePost(id, postRequest);
+		postService.update(id, postRequest);
 
 		return ResponseEntity.ok().build();
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deletePost(@PathVariable("id") Long id) {
-		postService.deletePost(id);
+		postService.delete(id);
 
 		return ResponseEntity.noContent().build();
 	}

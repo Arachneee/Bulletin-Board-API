@@ -36,7 +36,7 @@ public class CommentController {
 	public ResponseEntity<Void> createComment(@Login Member member,
 												@PathVariable Long postId,
 												@Valid @RequestBody CommentRequest commentRequest) {
-		Long commentId = commentService.createComment(member, postId, commentRequest);
+		Long commentId = commentService.create(member, postId, commentRequest);
 
 		return ResponseEntity.created(URI.create("/posts/" + postId + "/comments/" + commentId)).build();
 	}
@@ -63,14 +63,14 @@ public class CommentController {
 	@PatchMapping("/{commentId}")
 	public ResponseEntity<Void> updateComment(@PathVariable Long commentId,
 											  @Valid @RequestBody CommentRequest commentRequest) {
-		commentService.updateComment(commentId, commentRequest);
+		commentService.update(commentId, commentRequest);
 
 		return ResponseEntity.ok().build();
 	}
 
 	@DeleteMapping("/{commentId}")
 	public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
-		commentService.deleteComment(commentId);
+		commentService.delete(commentId);
 
 		return ResponseEntity.noContent().build();
 	}

@@ -17,14 +17,14 @@ public class CommentEmpathyController {
 	@PostMapping("")
 	public ResponseEntity<Void> createCommentEmpathy(@Login Member member,
 														@PathVariable Long commentId) {
-		commentEmpathyService.createCommentEmpathy(member, commentId);
+		commentEmpathyService.create(member, commentId);
 
 		return ResponseEntity.accepted().build();
 	}
 
 	@DeleteMapping("")
 	public ResponseEntity<Void> deleteCommentEmpathy(@Login Member member, @PathVariable Long commentId) {
-		commentEmpathyService.deleteCommentEmpathy(member, commentId);
+		commentEmpathyService.delete(member, commentId);
 
 		return ResponseEntity.noContent().build();
 	}

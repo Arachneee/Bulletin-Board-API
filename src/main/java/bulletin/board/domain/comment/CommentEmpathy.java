@@ -1,19 +1,15 @@
 package bulletin.board.domain.comment;
 
-import static jakarta.persistence.FetchType.*;
-
 import bulletin.board.domain.BaseEntity;
 import bulletin.board.domain.member.Member;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.Objects;
+
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -41,8 +37,11 @@ public class CommentEmpathy extends BaseEntity {
         return commentEmpathy;
     }
 
+    public boolean isWriter(final Member member) {
+        return this.member.equals(member);
+    }
 
-    private void setComment(Comment comment) {
+    private void setComment(final Comment comment) {
         this.comment = comment;
         comment.addEmpathy(this);
     }
@@ -51,7 +50,15 @@ public class CommentEmpathy extends BaseEntity {
         this.member = member;
     }
 
-    public Long getMemberId() {
-        return member.getId();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CommentEmpathy that)) return false;
+        return Objects.equals(getComment(), that.getComment()) && Objects.equals(getMember(), that.getMember());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getComment(), getMember());
     }
 }

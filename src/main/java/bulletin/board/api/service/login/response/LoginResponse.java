@@ -21,7 +21,7 @@ public class LoginResponse {
         this.memberResponse = memberResponse;
     }
 
-    public static LoginResponse login(Member member) {
-        return new LoginResponse(LOGIN_MESSAGE, MemberResponse.of(member));
+    public static LoginResponse login(final Member member) {
+        return new LoginResponse(LOGIN_MESSAGE, MemberResponse.from(member));
     }
 }

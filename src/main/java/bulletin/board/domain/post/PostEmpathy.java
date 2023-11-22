@@ -7,6 +7,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
@@ -27,12 +29,16 @@ public class PostEmpathy extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public static PostEmpathy create(Post post, Member member) {
+    public static PostEmpathy create(final Post post, final Member member) {
         PostEmpathy postEmpathy = new PostEmpathy();
         postEmpathy.setMember(member);
         postEmpathy.setPost(post);
 
         return postEmpathy;
+    }
+
+    public boolean isWriter(final Member member) {
+        return this.member.equals(member);
     }
 
     private void setPost(Post post) {
@@ -44,7 +50,15 @@ public class PostEmpathy extends BaseEntity {
         this.member = member;
     }
 
-    public Long getMemberId() {
-        return member.getId();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PostEmpathy that)) return false;
+        return Objects.equals(getPost(), that.getPost()) && Objects.equals(getMember(), that.getMember());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPost(), getMember());
     }
 }

@@ -1,17 +1,16 @@
 package bulletin.board.api;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-
 import bulletin.board.exceptions.constant.ErrorCode;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,17 +25,17 @@ public class ErrorResponse {
 		this.errors = errors;
 	}
 
-	private ErrorResponse(ErrorCode errorCode) {
+	private ErrorResponse(final ErrorCode errorCode) {
 		this.code = errorCode.getCode();
 		this.message = errorCode.getMessage();
 		this.errors = new ArrayList<>();
 	}
 
-	public static ErrorResponse of(ErrorCode errorCode, BindingResult bindingResult) {
+	public static ErrorResponse of(final ErrorCode errorCode, final BindingResult bindingResult) {
 		return new ErrorResponse(errorCode, BindingError.of(bindingResult));
 	}
 
-	public static ErrorResponse of(ErrorCode errorCode) {
+	public static ErrorResponse from(final ErrorCode errorCode) {
 		return new ErrorResponse(errorCode);
 	}
 
@@ -48,18 +47,22 @@ public class ErrorResponse {
 		private String value;
 		private String fieldMessage;
 
-		public static List<BindingError> of(BindingResult bindingResult) {
+		public static List<BindingError> of(final BindingResult bindingResult) {
 			return bindingResult.getFieldErrors()
 				.stream()
-				.map(fieldError -> BindingError.builder()
-												.field(fieldError.getField())
-												.value(getValue(fieldError))
-												.fieldMessage(fieldError.getDefaultMessage())
-												.build())
+				.map(BindingError::buildBindingError)
 				.collect(Collectors.toList());
 		}
 
-		private static String getValue(FieldError fieldError) {
+		private static BindingError buildBindingError(final FieldError fieldError) {
+			return BindingError.builder()
+					.field(fieldError.getField())
+					.value(getValue(fieldError))
+					.fieldMessage(fieldError.getDefaultMessage())
+					.build();
+		}
+
+		private static String getValue(final FieldError fieldError) {
 			return fieldError.getRejectedValue() == null ? "" : fieldError.getRejectedValue().toString();
 		}
 	}

@@ -1,26 +1,12 @@
 package bulletin.board.domain.comment;
 
-import static jakarta.persistence.FetchType.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import bulletin.board.exceptions.constant.ErrorCode;
 import bulletin.board.domain.BaseEntity;
 import bulletin.board.domain.member.Member;
 import bulletin.board.domain.post.Post;
 import bulletin.board.exceptions.DuplicatedEmpathyException;
 import bulletin.board.exceptions.SelfEmpathyException;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import bulletin.board.exceptions.constant.ErrorCode;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +14,11 @@ import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -69,7 +60,7 @@ public class Comment extends BaseEntity {
 	private boolean isDeleted = Boolean.FALSE;
 
 
-	public static Comment create(String content, Post post, Member member) {
+	public static Comment create(final String content, final Post post, final Member member) {
 		Comment comment = new Comment();
 		comment.setContent(content);
 		comment.setPost(post);
@@ -78,7 +69,7 @@ public class Comment extends BaseEntity {
 		return comment;
 	}
 
-	public static Comment createReply(String content, Comment parentComment, Member member) {
+	public static Comment createReply(final String content, final Comment parentComment, final Member member) {
 		Comment comment = new Comment();
 		comment.setParentComment(parentComment);
 		comment.setContent(content);
@@ -88,63 +79,48 @@ public class Comment extends BaseEntity {
 		return comment;
 	}
 
-	private void setContent(String content) {
-		this.content = content;
-	}
-
-	private void setPost(Post post) {
-		this.post = post;
-		post.getComments().add(this);
-	}
-
-	private void setMember(Member member) {
-		this.member = member;
-	}
-
-	private void setParentComment(Comment parentComment) {
-		this.parentComment = parentComment;
-		parentComment.getReplies().add(this);
-	}
-
-	public void update(String content) {
+	public void update(final String content) {
 		setContent(content);
 	}
 
-	public Integer getEmpathyCount() {
-		return commentEmpathies.size();
+	private void addReply(final Comment comment) {
+		replies.add(comment);
 	}
 
-	public void addEmpathy(CommentEmpathy commentEmpathy) {
-		validateCommentEmpathy(commentEmpathy.getMember());
+	public void addEmpathy(final CommentEmpathy commentEmpathy) {
+		validateCommentEmpathy(commentEmpathy);
 		commentEmpathies.add(commentEmpathy);
 	}
 
-	private void validateCommentEmpathy(Member empathyMember) {
-		validateWriter(empathyMember);
-		validateAlreadyEmpathized(empathyMember);
+	private void validateCommentEmpathy(final CommentEmpathy commentEmpathy) {
+		validateWriter(commentEmpathy);
+		validateAlreadyEmpathized(commentEmpathy);
 	}
 
-	public void validateWriter(Member member) {
-		if (isWriter(member)) {
+	public void validateWriter(final CommentEmpathy commentEmpathy) {
+		if (commentEmpathy.isWriter(member)) {
 			throw new SelfEmpathyException(ErrorCode.SELF_EMPATHY);
 		}
 	}
 
-	public void validateAlreadyEmpathized(Member member) {
-		if (isAlreadyEmpathized(member)) {
+	public void validateAlreadyEmpathized(final CommentEmpathy commentEmpathy) {
+		if (isAlreadyEmpathized(commentEmpathy)) {
 			throw new DuplicatedEmpathyException(ErrorCode.DUPLICATED_EMPATHY);
 		}
 	}
 
-	public boolean isAlreadyEmpathized(Member member) {
+	public boolean isAlreadyEmpathized(final CommentEmpathy commentEmpathy) {
 		return commentEmpathies.stream()
-			.map(CommentEmpathy::getMemberId)
-			.toList()
-			.contains(member.getId());
+			.anyMatch(commentEmpathy::equals);
+	}
+
+	public boolean isAlreadyEmpathized(final Member member) {
+		return commentEmpathies.stream()
+				.anyMatch(commentEmpathy -> commentEmpathy.isWriter(member));
 	}
 
 	public boolean isWriter(Member member) {
-		return this.member.getId().equals(member.getId());
+		return this.member.equals(member);
 	}
 
 	public boolean canEmpathy(Member member) {
@@ -157,5 +133,27 @@ public class Comment extends BaseEntity {
 
 	public Comment getRootComment() {
 		return parentComment == null ? this : getRootComment();
+	}
+
+	public Integer getEmpathyCount() {
+		return commentEmpathies.size();
+	}
+
+	private void setContent(String content) {
+		this.content = content;
+	}
+
+	private void setPost(final Post post) {
+		this.post = post;
+		post.addComment(this);
+	}
+
+	private void setMember(Member member) {
+		this.member = member;
+	}
+
+	private void setParentComment(final Comment parentComment) {
+		this.parentComment = parentComment;
+		parentComment.addReply(this);
 	}
 }

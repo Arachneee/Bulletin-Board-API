@@ -1,14 +1,14 @@
 package bulletin.board.api.service.comment.response;
 
-import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import bulletin.board.domain.comment.Comment;
 import bulletin.board.domain.member.Member;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -22,7 +22,7 @@ public class CommentResponse {
 	private boolean editButton;
 	private boolean empathyButton;
 
-	public static CommentResponse of(Comment comment, Member member) {
+	public static CommentResponse of(final Comment comment, final Member member) {
 		return CommentResponse.builder()
 				.id(comment.getId())
 				.content(comment.getContent())

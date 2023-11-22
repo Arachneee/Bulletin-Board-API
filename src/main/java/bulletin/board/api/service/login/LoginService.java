@@ -17,9 +17,9 @@ public class LoginService {
 	private final MemberRepository memberRepository;
 
 	@Transactional(readOnly = true)
-	public Member login(LoginRequest loginRequest) {
-		String loginId = loginRequest.getLoginId();
-		String password = loginRequest.getPassword();
+	public Member login(final LoginRequest loginRequest) {
+		final String loginId = loginRequest.getLoginId();
+		final String password = loginRequest.getPassword();
 
 		return memberRepository.findByLoginIdAndPassword(loginId, password)
 				.orElseThrow(() -> new LoginFailException(ErrorCode.BAD_LOGIN));

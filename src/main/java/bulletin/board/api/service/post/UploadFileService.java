@@ -1,23 +1,22 @@
 package bulletin.board.api.service.post;
 
-import bulletin.board.exceptions.constant.ErrorCode;
 import bulletin.board.domain.post.Post;
 import bulletin.board.domain.post.UploadFile;
+import bulletin.board.domain.post.repository.UploadFileRepository;
 import bulletin.board.exceptions.EntityNotFoundException;
 import bulletin.board.exceptions.FileUploadException;
-import bulletin.board.domain.post.repository.UploadFileRepository;
+import bulletin.board.exceptions.constant.ErrorCode;
+import com.google.cloud.storage.Bucket;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.*;
-
-import com.google.cloud.storage.Bucket;
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -27,24 +26,24 @@ public class UploadFileService {
     private final UploadFileRepository uploadFileRepository;
     private final Bucket bucket;
 
-    private String getFullPath(Long postId, String filename) {
+    private String getFullPath(final Long postId, final String filename) {
         return "/posts/" + postId + "/images/" + filename;
     }
 
     @Transactional
-    public void storeFiles(List<MultipartFile> multipartFiles, Post post) {
+    public void storeFiles(final List<MultipartFile> multipartFiles, final Post post) {
         multipartFiles.forEach(multipartFile -> storeFile(multipartFile, post));
     }
 
     @Transactional
-    public void storeFile(MultipartFile multipartFile, Post post) {
+    public void storeFile(final MultipartFile multipartFile, final Post post) {
         if (multipartFile.isEmpty()) {
             return;
         }
 
-        String originalFilename = multipartFile.getOriginalFilename();
-        String storeFileName = createStoreFileName(originalFilename);
-        String blob = getFullPath(post.getId(), storeFileName);
+        final String originalFilename = multipartFile.getOriginalFilename();
+        final String storeFileName = createStoreFileName(originalFilename);
+        final String blob = getFullPath(post.getId(), storeFileName);
 
         try {
             if(bucket.get(blob) != null) {
@@ -60,30 +59,34 @@ public class UploadFileService {
         }
     }
 
-    private String createStoreFileName(String originalFilename) {
-        String ext = extractExt(originalFilename);
-        String uuid = UUID.randomUUID().toString();
-
-        return uuid + "." + ext;
+    private String createStoreFileName(final String originalFilename) {
+        return UUID.randomUUID() + "." + extractExt(originalFilename);
     }
 
-    private String extractExt(String originalFilename) {
-        int pos = originalFilename.lastIndexOf(".");
+    private String extractExt(final String originalFilename) {
+        final int pos = originalFilename.lastIndexOf(".");
         return originalFilename.substring(pos + 1);
     }
 
-    public ByteArrayResource findImage(Long imageId) {
-        UploadFile image = uploadFileRepository.findById(imageId)
+    public ByteArrayResource findImage(final Long imageId) {
+        final UploadFile image = uploadFileRepository.findById(imageId)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.IMAGE_NOT_FOUND));
 
-        byte[] content = bucket.get(image.getPath()).getContent();
+        final byte[] content = bucket.get(image.getPath()).getContent();
 
         return new ByteArrayResource(content);
     }
 
     @Transactional
-    public void delete(Long imageId) {
-        UploadFile image = uploadFileRepository.findById(imageId)
+    public void updateFiles(final List<MultipartFile> images, final Post post) {
+        if (images != null) {
+            storeFiles(images, post);
+        }
+    }
+
+    @Transactional
+    public void delete(final Long imageId) {
+        final UploadFile image = uploadFileRepository.findById(imageId)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.IMAGE_NOT_FOUND));
 
         bucket.get(image.getPath()).delete();
@@ -92,14 +95,7 @@ public class UploadFileService {
     }
 
     @Transactional
-    public void updateFiles(List<MultipartFile> images, Post post) {
-        if (images != null) {
-            storeFiles(images, post);
-        }
-    }
-
-    @Transactional
-    public void deleteFiles(List<Long> deleteImageIds) {
+    public void deleteFiles(final List<Long> deleteImageIds) {
         if (deleteImageIds != null) {
             deleteImageIds.forEach(this::delete);
         }

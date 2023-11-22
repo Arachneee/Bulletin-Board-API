@@ -1,21 +1,22 @@
 package bulletin.board.api.service.post;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import bulletin.board.IntegrationTestSupport;
 import bulletin.board.domain.member.Member;
 import bulletin.board.domain.member.MemberRepository;
 import bulletin.board.domain.post.Post;
 import bulletin.board.domain.post.repository.PostRepository;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@Transactional
 class PostServiceTest extends IntegrationTestSupport {
 
 	private static final int COUNT = 100;

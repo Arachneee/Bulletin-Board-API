@@ -22,52 +22,56 @@ public class MemberService {
 	private final MemberRepository memberRepository;
 
 	@Transactional
-	public Long createMember(MemberRequest memberRequest) {
-		validateMemberRequest(memberRequest);
-		Member savedMember = saveMember(memberRequest);
+	public Long create(final MemberRequest memberRequest) {
+		validateRequest(memberRequest);
+		final Member savedMember = save(memberRequest);
 
 		return savedMember.getId();
 	}
 
-	private void validateMemberRequest(MemberRequest memberRequest) {
+	private void validateRequest(final MemberRequest memberRequest) {
 		validateLoginId(memberRequest.getLoginId());
 		validateName(memberRequest.getName());
 	}
 
-	public void validateName(String name) {
-		if (memberRepository.existsByName(name)) {
-			throw new DuplicatedNameException(ErrorCode.DUPLICATED_NAME);
-		}
-	}
-
-	public void validateLoginId(String loginId) {
+	public void validateLoginId(final String loginId) {
 		if (memberRepository.existsByLoginId(loginId)) {
 			throw new DuplicatedLoginIdException(ErrorCode.DUPLICATED_LOGIN_ID);
 		}
 	}
 
-	private Member saveMember(MemberRequest memberRequest) {
-		return memberRepository.save(Member.create(memberRequest.getLoginId(), memberRequest.getPassword(), memberRequest.getName()));
+	public void validateName(final String name) {
+		if (memberRepository.existsByName(name)) {
+			throw new DuplicatedNameException(ErrorCode.DUPLICATED_NAME);
+		}
+	}
+
+	private Member save(final MemberRequest memberRequest) {
+		return memberRepository.save(createMember(memberRequest));
+	}
+
+	private static Member createMember(final MemberRequest memberRequest) {
+		return Member.create(memberRequest.getLoginId(), memberRequest.getPassword(), memberRequest.getName());
 	}
 
 	@Transactional(readOnly = true)
-	public MemberResponse findMember(Long id) {
-		Member member = memberRepository.findById(id)
+	public MemberResponse findById(final Long id) {
+		final Member member = memberRepository.findById(id)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
-		return MemberResponse.of(member);
+		return MemberResponse.from(member);
 	}
 
 	@Transactional
-	public void updateName(Long id, MemberNameRequest memberNameRequest) {
-		Member findmember = memberRepository.findById(id)
+	public void updateName(final Long id, final MemberNameRequest memberNameRequest) {
+		final Member findmember = memberRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
 		findmember.changeName(memberNameRequest.getName());
 	}
 
 	@Transactional
-	public void deleteMember(Long id) {
+	public void delete(final Long id) {
 		memberRepository.deleteById(id);
 	}
 
