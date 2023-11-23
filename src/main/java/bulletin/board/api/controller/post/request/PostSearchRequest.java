@@ -1,6 +1,7 @@
 package bulletin.board.api.controller.post.request;
 
 import bulletin.board.domain.post.constant.SearchCode;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,5 +16,11 @@ public class PostSearchRequest {
     public PostSearchRequest() {
         this.searchCode = SearchCode.TITLE;
         this.searchString = "";
+    }
+
+    @Builder
+    public PostSearchRequest(SearchCode searchCode, String searchString) {
+        this.searchCode = searchCode;
+        this.searchString = searchString;
     }
 }

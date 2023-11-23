@@ -1,13 +1,16 @@
 package bulletin.board.api.controller.post;
 
-import java.net.URI;
-
 import bulletin.board.api.controller.post.request.PostRequest;
 import bulletin.board.api.controller.post.request.PostSearchRequest;
+import bulletin.board.api.service.login.Login;
+import bulletin.board.api.service.post.PostService;
+import bulletin.board.api.service.post.UploadFileService;
 import bulletin.board.api.service.post.response.PostDetailResponse;
 import bulletin.board.api.service.post.response.PostResponse;
-import bulletin.board.api.service.post.UploadFileService;
-
+import bulletin.board.domain.member.Member;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -19,12 +22,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import bulletin.board.api.service.login.Login;
-import bulletin.board.domain.member.Member;
-import bulletin.board.api.service.post.PostService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
+import java.net.URI;
 
 @Slf4j
 @RestController
@@ -47,7 +46,8 @@ public class PostController {
 		@Valid PostSearchRequest postSearchRequest,
 		@Valid @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
 
-		return ResponseEntity.ok().body(postService.findPosts(postSearchRequest, pageable));
+		Page<PostResponse> posts = postService.findPosts(postSearchRequest, pageable);
+		return ResponseEntity.ok().body(posts);
 	}
 
 	@GetMapping("/{id}")

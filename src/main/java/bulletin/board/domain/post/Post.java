@@ -38,7 +38,7 @@ public class Post extends BaseEntity {
 	private String content;
 
 	@BatchSize(size = 10)
-	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<UploadFile> images = new ArrayList<>();
 
 	@ManyToOne(fetch = LAZY)
@@ -48,7 +48,7 @@ public class Post extends BaseEntity {
 	private Integer viewCount;
 
 	@BatchSize(size = 10)
-	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Comment> comments = new ArrayList<>();
 
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)

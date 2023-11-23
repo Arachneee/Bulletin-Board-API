@@ -43,7 +43,7 @@ public class Comment extends BaseEntity {
 	@JoinColumn(name = "member_id")
 	private Member member;
 
-	@OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CommentEmpathy> commentEmpathies = new ArrayList<>();
 
 	@ManyToOne(fetch = LAZY)

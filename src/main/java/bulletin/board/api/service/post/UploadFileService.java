@@ -52,7 +52,6 @@ public class UploadFileService {
             byte[] image = multipartFile.getBytes();
 
             bucket.create(blob, image);
-
             uploadFileRepository.save(UploadFile.create(originalFilename, storeFileName, blob, post));
         } catch (IOException e) {
             throw new FileUploadException(ErrorCode.FILE_NOT_UPLOAD);
