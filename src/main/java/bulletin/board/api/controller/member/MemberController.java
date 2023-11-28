@@ -1,21 +1,20 @@
 package bulletin.board.api.controller.member;
 
-import java.net.URI;
-import java.util.Map;
-
 import bulletin.board.api.controller.member.request.MemberNameRequest;
+import bulletin.board.api.controller.member.request.MemberRequest;
+import bulletin.board.api.service.member.MemberService;
+import bulletin.board.api.service.member.response.MemberResponse;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import bulletin.board.api.controller.member.request.MemberRequest;
-import bulletin.board.api.service.member.response.MemberResponse;
-import bulletin.board.api.service.member.MemberService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import java.net.URI;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/members")
+@RequestMapping("/api/members")
 public class MemberController {
 
 	private final MemberService memberService;

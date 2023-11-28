@@ -1,33 +1,25 @@
 package bulletin.board.api.controller.comment;
 
-import java.net.URI;
-
-import bulletin.board.api.service.comment.response.BestCommentResponse;
 import bulletin.board.api.controller.comment.request.CommentRequest;
+import bulletin.board.api.service.comment.CommentService;
+import bulletin.board.api.service.comment.response.BestCommentResponse;
+import bulletin.board.api.service.comment.response.CommentResponse;
+import bulletin.board.api.service.login.Login;
+import bulletin.board.domain.member.Member;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import bulletin.board.api.service.login.Login;
-import bulletin.board.domain.member.Member;
-import bulletin.board.api.service.comment.response.CommentResponse;
-import bulletin.board.api.service.comment.CommentService;
-import lombok.RequiredArgsConstructor;
+import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/posts/{postId}/comments")
+@RequestMapping("/api/posts/{postId}/comments")
 public class CommentController {
 
 	private final CommentService commentService;

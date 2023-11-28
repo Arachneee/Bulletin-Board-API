@@ -7,6 +7,7 @@ import bulletin.board.exceptions.DuplicatedLoginIdException;
 import bulletin.board.exceptions.DuplicatedNameException;
 import bulletin.board.exceptions.EntityNotFoundException;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberService {
 
 	private final MemberRepository memberRepository;
+	private final PasswordEncoder passwordEncoder;
 
 	@Transactional
 	public Long create(final MemberRequest memberRequest) {
@@ -50,8 +52,10 @@ public class MemberService {
 		return memberRepository.save(createMember(memberRequest));
 	}
 
-	private static Member createMember(final MemberRequest memberRequest) {
-		return Member.create(memberRequest.getLoginId(), memberRequest.getPassword(), memberRequest.getName());
+	private Member createMember(final MemberRequest memberRequest) {
+		String encodedPassword = passwordEncoder.encode(memberRequest.getPassword());
+
+		return Member.create(memberRequest.getLoginId(), encodedPassword, memberRequest.getName());
 	}
 
 	@Transactional(readOnly = true)

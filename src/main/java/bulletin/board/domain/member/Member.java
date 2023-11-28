@@ -26,11 +26,13 @@ public class Member extends BaseEntity {
     @Column(nullable = false, length = 30)
     private String loginId;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false, length = 30)
     private String name;
+
+    private String role;
 
     private boolean isDeleted = Boolean.FALSE;
 
@@ -44,25 +46,11 @@ public class Member extends BaseEntity {
         return member;
     }
 
-    public static Member testCreate(String loginId, String password, String name, Long id) {
-        Member member = new Member();
-        member.setLoginId(loginId);
-        member.setPassword(password);
-        member.setName(name);
-        member.setId(id);
-
-        return member;
-    }
-
-    private void setId(Long id) {
-        this.id = id;
-    }
-
     private void setLoginId(String loginId) {
         this.loginId = loginId;
     }
 
-    private void setPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
@@ -85,4 +73,6 @@ public class Member extends BaseEntity {
     public int hashCode() {
         return Objects.hash(getLoginId());
     }
+
+
 }

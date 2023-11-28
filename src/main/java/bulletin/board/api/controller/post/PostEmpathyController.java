@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/posts/{postId}/empathy")
+@RequestMapping("/api/posts/{postId}/empathy")
 public class PostEmpathyController {
 
     private final PostEmpathyService postEmpathyService;
