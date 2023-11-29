@@ -6,6 +6,7 @@ import bulletin.board.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
@@ -31,11 +32,13 @@ public class WebConfig implements WebMvcConfigurer {
         resolvers.add(new LoginMemberArgumentResolver());
     }
 
-//    @Override
-//    public void addCorsMappings(final CorsRegistry registry) {
-//        registry.addMapping("/**")
-//            .allowedOrigins("*")
-//            .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE")
-//            .maxAge(MAX_AGE_SECS);
-//    }
+    @Override
+    public void addCorsMappings(final CorsRegistry registry) {
+        registry.addMapping("/**")
+            .allowedOrigins("*")
+            .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE")
+            .allowedHeaders("*")
+            .allowCredentials(false)
+            .maxAge(MAX_AGE_SECS);
+    }
 }

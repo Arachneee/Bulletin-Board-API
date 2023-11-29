@@ -101,13 +101,12 @@ export default {
         sort: this.sort
       }
 
-      console.log(this.requestBody)
-
-      this.$axios.get(this.$serverUrl + "/posts", {
-        params: this.requestBody,
-        headers: {}
+      console.log("posts 요청")
+      
+      this.$axios.get('/api/posts', {
+        params: this.requestBody
       }).then((res) => {
-
+        console.log("posts 응답")
         this.list = res.data.content 
         this.number = res.data.number
         this.first = res.data.first

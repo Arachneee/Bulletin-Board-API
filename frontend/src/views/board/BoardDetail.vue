@@ -152,7 +152,7 @@ export default {
   methods: {
     fnGetView() {
       console.log('Detail의 fnGetView 호출')
-      this.$axios.get(this.$serverUrl + '/posts/' + this.idx, {
+      this.$axios.get('/api/posts/' + this.idx, {
         params: this.requestBody
       }).then((res) => {
         console.log('Detail의 fnGetView 응답')
@@ -178,7 +178,7 @@ export default {
           sort: this.commentSort
       }
 
-      this.$axios.get(this.$serverUrl + '/posts/' + this.idx + '/comments', {
+      this.$axios.get('/api/posts/' + this.idx + '/comments', {
           params: this.cmRequestBody
         }).then((res) => {
           this.list = res.data.content  
@@ -199,7 +199,7 @@ export default {
         })
     },
     fnGetBestCmView() {
-      this.$axios.get(this.$serverUrl + '/posts/' + this.idx + '/comments/top').then((res) => {
+      this.$axios.get('/api/posts/' + this.idx + '/comments/top').then((res) => {
         console.log("베스트 댓글" + JSON.stringify(res.data))
         this.bestComment = res.data  
       }).catch((err) => {
@@ -231,7 +231,7 @@ export default {
     fnDelete() {
       if (!confirm("삭제하시겠습니까?")) return
 
-      this.$axios.delete(this.$serverUrl + '/posts/' + this.idx, {})
+      this.$axios.delete('/api/posts/' + this.idx, {})
           .then(() => {
             alert('삭제되었습니다.')
             this.fnList();
@@ -240,7 +240,7 @@ export default {
       })
     },
     fnPostEmpathy() {
-      this.$axios.post(this.$serverUrl + '/posts/' + this.idx + '/empathy', {})
+      this.$axios.post('/api/posts/' + this.idx + '/empathy', {})
         .then(() => {
           alert('공감했습니다.')
           this.fnGetView();
@@ -249,7 +249,7 @@ export default {
       })
     },
     fnPostEmpathyDelete() {
-      this.$axios.delete(this.$serverUrl + '/posts/' + this.idx + '/empathy', {})
+      this.$axios.delete('/api/posts/' + this.idx + '/empathy', {})
         .then(() => {
           alert('공감 취소했습니다.')
           this.fnGetView();
@@ -258,7 +258,7 @@ export default {
       })
     },
     fnCmEmpathy(id) {
-      this.$axios.post(this.$serverUrl + '/posts/' + this.idx + '/comments/' + id + '/empathy', {})
+      this.$axios.post('/api/posts/' + this.idx + '/comments/' + id + '/empathy', {})
         .then(() => {
           alert('공감했습니다.')
           this.fnCmGetView();
@@ -268,7 +268,7 @@ export default {
       })
     },
     fnCmEmpathyDelete(id) {
-      this.$axios.delete(this.$serverUrl + '/posts/' + this.idx + '/comments/' + id + '/empathy', {})
+      this.$axios.delete('/api/posts/' + this.idx + '/comments/' + id + '/empathy', {})
         .then(() => {
           alert('공감 취소했습니다.')
           this.fnCmGetView();
@@ -282,7 +282,7 @@ export default {
         commentContent: this.commentContent,
       }
 
-      this.$axios.post(this.$serverUrl + '/posts/' + this.idx + '/comments', this.cmRequestBody)
+      this.$axios.post('/api/posts/' + this.idx + '/comments', this.cmRequestBody)
           .then(() => {
             alert('댓글이 작성되었습니다.')
             this.fnCmGetView();
@@ -303,7 +303,7 @@ export default {
     fnCmDelete(id) {
       if (!confirm("삭제하시겠습니까?")) return
 
-      this.$axios.delete(this.$serverUrl + '/posts/' + this.idx + '/comments/' + id, {})
+      this.$axios.delete('/api/posts/' + this.idx + '/comments/' + id, {})
           .then(() => {
             alert('삭제되었습니다.')
             this.fnCmGetView();
@@ -328,7 +328,7 @@ export default {
         commentContent: this.commentContent,
       }
 
-      this.$axios.post(this.$serverUrl + '/posts/' + this.idx + '/comments/' + id, this.cmRequestBody)
+      this.$axios.post('/api/posts/' + this.idx + '/comments/' + id, this.cmRequestBody)
           .then(() => {
             alert('대댓글이 작성되었습니다.')
             this.fnCmGetView();

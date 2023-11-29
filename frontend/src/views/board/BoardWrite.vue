@@ -94,7 +94,7 @@ export default {
 
       if (this.idx === undefined) {
         console.log("post로 전송")
-        this.$axios.post(this.$serverUrl + '/posts', formData)
+        this.$axios.post('/api/posts', formData)
             .then(() => {
             alert('글이 저장되었습니다.')
             this.fnList()
@@ -106,7 +106,7 @@ export default {
 
       } else {
         console.log("patch 전송")
-        this.$axios.patch(this.$serverUrl + '/posts' + '/' + this.idx, formData)
+        this.$axios.patch('/api/posts' + '/' + this.idx, formData)
             .then(() => {
             alert('글이 수정되었습니다.')
             this.fnView(this.idx)

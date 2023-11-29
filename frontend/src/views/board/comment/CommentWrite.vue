@@ -52,7 +52,7 @@ export default {
       this.form = {
         "commentContent": this.commentContent,
       }
-      this.$axios.patch(this.$serverUrl + '/posts/' + this.idx + '/comments/' + this.commentId, this.form)
+      this.$axios.patch('/api/posts/' + this.idx + '/comments/' + this.commentId, this.form)
         .then((res) => {
                 console.log('patch 응답완료' + res.data)
                 alert('댓글이 수정되었습니다.')

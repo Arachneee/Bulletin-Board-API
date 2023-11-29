@@ -3,20 +3,20 @@ package bulletin.board.domain.member;
 
 import bulletin.board.domain.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import java.util.Objects;
+import java.io.Serializable;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(exclude = {"roles"})
+@EqualsAndHashCode(of = "id", callSuper = false)
 @Where(clause = "is_deleted = false")
 @SQLDelete(sql = "UPDATE member SET is_deleted = true where member_id = ?")
-public class Member extends BaseEntity {
+public class Member extends BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +33,11 @@ public class Member extends BaseEntity {
     private String name;
 
     private String role;
+
+//    @ManyToMany(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
+//    @JoinTable(name = "member_roles", joinColumns = { @JoinColumn(name = "member_id") }, inverseJoinColumns = {
+//            @JoinColumn(name = "role_id") })
+//    private Set<Role> roles = new HashSet<>();
 
     private boolean isDeleted = Boolean.FALSE;
 
@@ -61,18 +66,4 @@ public class Member extends BaseEntity {
     public void changeName(final String newName) {
         setName(newName);
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Member member)) return false;
-        return Objects.equals(getLoginId(), member.getLoginId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getLoginId());
-    }
-
-
 }

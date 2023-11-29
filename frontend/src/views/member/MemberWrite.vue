@@ -72,7 +72,7 @@ export default {
           "name": this.name,
           "password": this.password
         }
-        this.$axios.post(this.$serverUrl + '/members', this.form)
+        this.$axios.post('/api/members', this.form)
           .then((res) => {
             console.log('patch 응답완료' + res.data)
             alert('회원 가입되었습니다.')
@@ -94,7 +94,7 @@ export default {
       this.form = {
         "loginId": this.loginId,
       }
-      this.$axios.post(this.$serverUrl + '/members/loginId', this.form)
+      this.$axios.post('/api/members/loginId', this.form)
           .then(() => {
             alert('사용할 수 있는 아이디 입니다.')
             this.loginIdOk = true
@@ -109,7 +109,7 @@ export default {
       this.form = {
         "loginId": this.loginId,
       }
-      this.$axios.post(this.$serverUrl + '/members/name', this.form)
+      this.$axios.post('/api/members/name', this.form)
           .then(() => {
               alert('사용할 수 있는 닉네임 입니다.')
               this.nameOk = true

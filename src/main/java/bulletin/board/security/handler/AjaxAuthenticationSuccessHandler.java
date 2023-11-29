@@ -1,5 +1,6 @@
 package bulletin.board.security.handler;
 
+import bulletin.board.api.service.member.response.MemberResponse;
 import bulletin.board.domain.member.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
@@ -20,10 +21,11 @@ public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHa
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
         Member member = (Member) authentication.getPrincipal();
+        MemberResponse memberResponse = MemberResponse.from(member);
 
         response.setStatus(HttpStatus.OK.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        objectMapper.writeValue(response.getWriter(), member);
+        objectMapper.writeValue(response.getWriter(), memberResponse);
     }
 }

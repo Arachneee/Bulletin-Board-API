@@ -4,7 +4,7 @@ import BoardList from '@/views/board/BoardList.vue'
 import BoardDetail from '@/views/board/BoardDetail.vue'
 import BoardWrite from '@/views/board/BoardWrite.vue'
 import CommentWrite from '@/views/board/comment/CommentWrite.vue'
-// import Login from "@/views/common/Login"
+import Login from "@/views/common/LoginForm"
 import MemberWrite from '@/views/member/MemberWrite.vue'
 
 const routes = [
@@ -13,11 +13,11 @@ const routes = [
     name: 'PageHome',
     component: PageHome
   },
-  // {
-  //   path: '/login',
-  //   name: 'Login',
-  //   component: Login  //로그인 컴포넌트 추가
-  // },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login  //로그인 컴포넌트 추가
+  },
   {
     path: '/board/list',
     name: 'BoardList',

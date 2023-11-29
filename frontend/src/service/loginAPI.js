@@ -2,15 +2,16 @@
 
 // const getUserInfo = (userId, userPw) => {
 //   const reqData = {
-//     'loginId': userId,
+//     'username': userId,
 //     'password': userPw
 //   }
 
 //   let serverUrl = '//localhost:8080'
 
-//   return axios.post(serverUrl + '/login', reqData, {
+//   return axios.post(serverUrl + '/api/login', reqData, {
 //     headers: {
-//       'Content-type': 'application/json'
+//       'Content-type': 'application/json',
+//       'X-Requested-With': 'XMLHttpRequest'
 //     }
 //   })
 // }
