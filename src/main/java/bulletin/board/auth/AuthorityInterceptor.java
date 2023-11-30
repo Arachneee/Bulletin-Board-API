@@ -1,7 +1,6 @@
 package bulletin.board.auth;
 
 import bulletin.board.domain.comment.repository.CommentRepository;
-import bulletin.board.domain.member.Member;
 import bulletin.board.domain.post.repository.PostRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+// Spring Security 사용하기 전 버전
 @Slf4j
 @RequiredArgsConstructor
 public class AuthorityInterceptor implements HandlerInterceptor {
@@ -44,7 +44,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    private boolean isNotAuthorityMember(String requestURI, Member loginMember) {
+//    private boolean isNotAuthorityMember(String requestURI, Member loginMember) {
 //        String[] urlSplit = requestURI.split("/");
 //
 //
@@ -67,8 +67,8 @@ public class AuthorityInterceptor implements HandlerInterceptor {
 //
 //            return !commentRepository.existsByIdAndMember(commentsId, loginMember);
 //        }
-
-        return false;
-    }
+//
+//        return false;
+//    }
 
 }

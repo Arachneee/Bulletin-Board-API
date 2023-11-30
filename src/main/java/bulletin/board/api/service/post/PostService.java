@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PostService {
 
 	private final PostRepository postRepository;
@@ -40,6 +42,7 @@ public class PostService {
 		return Post.create(postRequest.getTitle(), postRequest.getContent(), member);
 	}
 
+	@PreAuthorize("@postChecker.isSelf(#postId) or hasAuthority('ADMIN')")
 	@Transactional
 	public void update(final Long postId, final PostRequest postRequest) {
 		final Post findPost = postRepository.findById(postId)
@@ -61,7 +64,6 @@ public class PostService {
 		return PostDetailResponse.of(post, member);
 	}
 
-	@Transactional(readOnly = true)
 	public Page<PostResponse> findPosts(final PostSearchRequest postSearchRequest, final Pageable pageable) {
 		final Page<Post> posts = postRepository.searchPosts(postSearchRequest.getSearchCode(),
 														postSearchRequest.getSearchString(),
@@ -70,6 +72,7 @@ public class PostService {
 		return posts.map(PostResponse::from);
 	}
 
+	@PreAuthorize("@postChecker.isSelf(#postId) or hasAuthority('ADMIN')")
 	@Transactional
 	public void delete(final Long postId) {
 		final Post findPost = postRepository.findWithCommentsById(postId)

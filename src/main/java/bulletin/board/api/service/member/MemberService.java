@@ -7,6 +7,7 @@ import bulletin.board.exceptions.DuplicatedLoginIdException;
 import bulletin.board.exceptions.DuplicatedNameException;
 import bulletin.board.exceptions.EntityNotFoundException;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,6 +67,7 @@ public class MemberService {
 		return MemberResponse.from(member);
 	}
 
+	@PreAuthorize("@memberChecker.isSelf(#id) or hasAuthority('ADMIN')")
 	@Transactional
 	public void updateName(final Long id, final MemberNameRequest memberNameRequest) {
 		final Member findmember = memberRepository.findById(id)
@@ -74,6 +76,7 @@ public class MemberService {
 		findmember.changeName(memberNameRequest.getName());
 	}
 
+	@PreAuthorize("@memberChecker.isSelf(#id) or hasAuthority('ADMIN')")
 	@Transactional
 	public void delete(final Long id) {
 		memberRepository.deleteById(id);

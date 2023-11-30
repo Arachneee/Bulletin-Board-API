@@ -31,8 +31,17 @@ public class ErrorResponse {
 		this.errors = new ArrayList<>();
 	}
 
+	private ErrorResponse(String message, String code) {
+		this.message = message;
+		this.code = code;
+	}
+
 	public static ErrorResponse of(final ErrorCode errorCode, final BindingResult bindingResult) {
 		return new ErrorResponse(errorCode, BindingError.of(bindingResult));
+	}
+
+	public static ErrorResponse create(final String errorMessage, final String errorCode) {
+		return new ErrorResponse(errorMessage, errorCode);
 	}
 
 	public static ErrorResponse from(final ErrorCode errorCode) {

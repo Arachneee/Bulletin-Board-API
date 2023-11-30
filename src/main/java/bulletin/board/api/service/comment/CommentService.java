@@ -5,6 +5,7 @@ import bulletin.board.api.service.comment.response.BestCommentResponse;
 import bulletin.board.api.controller.comment.request.CommentRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +60,7 @@ public class CommentService {
 		return BestCommentResponse.of(findComment, member);
 	}
 
+	@PreAuthorize("@commentChecker.isSelf(#commentId) or hasAuthority('ADMIN')")
 	@Transactional
 	public void update(final Long commentId, final CommentRequest commentRequest) {
 		final Comment findComment = commentRepository.findById(commentId)
@@ -67,6 +69,7 @@ public class CommentService {
 		findComment.update(commentRequest.getCommentContent());
 	}
 
+	@PreAuthorize("@commentChecker.isSelf(#commentId) or hasAuthority('ADMIN')")
 	@Transactional
 	public void delete(final Long commentId) {
 		final Comment findComment = commentRepository.findWithEmpathyById(commentId)

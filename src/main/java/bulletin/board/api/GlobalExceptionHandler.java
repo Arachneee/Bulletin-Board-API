@@ -1,8 +1,6 @@
 package bulletin.board.api;
 
-import bulletin.board.exceptions.AuthorityException;
 import bulletin.board.exceptions.BusinessException;
-import bulletin.board.exceptions.LoginFailException;
 import bulletin.board.exceptions.constant.ErrorCode;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.net.URI;
+import java.nio.file.AccessDeniedException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -26,20 +25,11 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(errorResponse);
 	}
 
-	@Order(2)
-	@ExceptionHandler(LoginFailException.class)
-	protected ResponseEntity<ErrorResponse> handleAuthorityException(LoginFailException e) {
-		ErrorCode errorCode = e.getErrorCode();
-		ErrorResponse errorResponse = ErrorResponse.from(errorCode);
-		return ResponseEntity.status(errorCode.getStatus()).location(URI.create("/members")).body(errorResponse);
-	}
-
 	@Order(3)
-	@ExceptionHandler(AuthorityException.class)
-	protected ResponseEntity<ErrorResponse> handleAuthorityException(AuthorityException e) {
-		ErrorCode errorCode = e.getErrorCode();
-		ErrorResponse errorResponse = ErrorResponse.from(errorCode);
-		return ResponseEntity.status(errorCode.getStatus()).location(URI.create("/login")).body(errorResponse);
+	@ExceptionHandler(AccessDeniedException.class)
+	protected ResponseEntity<ErrorResponse> handleAuthorityException(AccessDeniedException e) {
+		ErrorResponse errorResponse = ErrorResponse.from(ErrorCode.INVALID_AUTHORITY);
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).location(URI.create("/login")).body(errorResponse);
 	}
 
 	@Order(4)

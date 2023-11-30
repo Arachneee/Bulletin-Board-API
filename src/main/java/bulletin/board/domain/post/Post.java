@@ -120,11 +120,11 @@ public class Post extends BaseEntity {
 	}
 
 	public boolean canEmpathy(final Member member) {
-		return !(isAlreadyEmpathized(member) || isWriter(member));
+		return !(isAlreadyEmpathized(member) || isWriterOrAdmin(member));
 	}
 
-	public boolean isWriter(final Member member) {
-		return this.member.equals(member);
+	public boolean isWriterOrAdmin(final Member member) {
+		return this.member.equals(member) || member.isAdmin();
 	}
 
 	private void setTitle(String title) {

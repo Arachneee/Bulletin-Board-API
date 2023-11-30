@@ -32,7 +32,9 @@ public class UploadFileService {
 
     @Transactional
     public void storeFiles(final List<MultipartFile> multipartFiles, final Post post) {
-        multipartFiles.forEach(multipartFile -> storeFile(multipartFile, post));
+        if (multipartFiles != null) {
+            multipartFiles.forEach(multipartFile -> storeFile(multipartFile, post));
+        }
     }
 
     @Transactional

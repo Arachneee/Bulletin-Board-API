@@ -12,7 +12,6 @@ import java.io.Serializable;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(exclude = {"roles"})
 @EqualsAndHashCode(of = "id", callSuper = false)
 @Where(clause = "is_deleted = false")
 @SQLDelete(sql = "UPDATE member SET is_deleted = true where member_id = ?")
@@ -32,7 +31,8 @@ public class Member extends BaseEntity implements Serializable {
     @Column(nullable = false, length = 30)
     private String name;
 
-    private String role;
+    @Enumerated(value = EnumType.STRING)
+    private Role role = Role.USER;
 
 //    @ManyToMany(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
 //    @JoinTable(name = "member_roles", joinColumns = { @JoinColumn(name = "member_id") }, inverseJoinColumns = {
@@ -65,5 +65,13 @@ public class Member extends BaseEntity implements Serializable {
 
     public void changeName(final String newName) {
         setName(newName);
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public boolean isAdmin() {
+        return role.isAdmin();
     }
 }

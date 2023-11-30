@@ -1,5 +1,6 @@
 package bulletin.board.security.handler;
 
+import bulletin.board.exceptions.constant.ErrorCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,6 +13,6 @@ public class AjaxAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access is denied");
+        response.sendError(HttpServletResponse.SC_FORBIDDEN, ErrorCode.INVALID_AUTHORITY.getMessage());
     }
 }

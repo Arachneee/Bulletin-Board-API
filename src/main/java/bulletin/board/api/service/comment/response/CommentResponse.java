@@ -29,7 +29,7 @@ public class CommentResponse {
 				.name(comment.getWriterName())
 				.createdDate(comment.getCreatedDate())
 				.empathyCount(comment.getEmpathyCount())
-				.editButton(comment.isWriter(member))
+				.editButton(comment.isWriterOrAdmin(member))
 				.empathyButton(comment.canEmpathy(member))
 				.replies(comment.getReplies().stream()
 						.map(replay -> CommentResponse.of(replay, member))

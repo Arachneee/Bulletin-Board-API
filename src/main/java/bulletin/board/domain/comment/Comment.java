@@ -119,12 +119,12 @@ public class Comment extends BaseEntity {
 				.anyMatch(commentEmpathy -> commentEmpathy.isWriter(member));
 	}
 
-	public boolean isWriter(Member member) {
-		return this.member.equals(member);
+	public boolean isWriterOrAdmin(Member member) {
+		return this.member.equals(member) || member.isAdmin();
 	}
 
 	public boolean canEmpathy(Member member) {
-		return !(isAlreadyEmpathized(member) || isWriter(member));
+		return !(isAlreadyEmpathized(member) || isWriterOrAdmin(member));
 	}
 
 	public String getWriterName() {

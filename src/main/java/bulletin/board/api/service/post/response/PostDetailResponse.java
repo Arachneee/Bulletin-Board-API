@@ -33,7 +33,7 @@ public class PostDetailResponse {
 									.createdDate(post.getCreatedDate())
 									.viewCount(post.getViewCount())
 									.empathyCount(post.getEmpathyCount())
-									.editButton(post.isWriter(member))
+									.editButton(post.isWriterOrAdmin(member))
 									.empathyButton(post.canEmpathy(member))
 									.imageUrls(post.getImages().stream()
 										.map(UploadFile::getImageUrl)
