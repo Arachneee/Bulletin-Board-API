@@ -60,6 +60,7 @@ public class AjaxSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers("/api/posts/{}").authenticated()
                         .requestMatchers("/api/posts").hasAuthority("MANAGER")
                         .requestMatchers("/api/login").permitAll()
                         .requestMatchers("/api/members").permitAll()
