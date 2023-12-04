@@ -31,7 +31,7 @@ public class PostService {
 
 	@Transactional
 	public Long create(final Member member, final PostRequest postRequest) {
-		final Post savedPost = postRepository.save(createPost(member, postRequest));
+		Post savedPost = postRepository.save(createPost(member, postRequest));
 
 		uploadFileService.storeFiles(postRequest.getImages(), savedPost);
 
@@ -45,7 +45,7 @@ public class PostService {
 	@PreAuthorize("@postChecker.isSelf(#postId) or hasAuthority('ADMIN')")
 	@Transactional
 	public void update(final Long postId, final PostRequest postRequest) {
-		final Post findPost = postRepository.findById(postId)
+		Post findPost = postRepository.findById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.POST_NOT_FOUND));
 
 		findPost.update(postRequest.getTitle(), postRequest.getContent());
@@ -56,7 +56,7 @@ public class PostService {
 
 	@Transactional
 	public PostDetailResponse findPost(final Member member, final Long id) {
-		final Post post = postRepository.findWithMemberAndImagesById(id)
+		Post post = postRepository.findWithMemberAndImagesById(id)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.POST_NOT_FOUND));
 
 		post.view();
@@ -65,7 +65,7 @@ public class PostService {
 	}
 
 	public Page<PostResponse> findPosts(final PostSearchRequest postSearchRequest, final Pageable pageable) {
-		final Page<Post> posts = postRepository.searchPosts(postSearchRequest.getSearchCode(),
+		Page<Post> posts = postRepository.searchPosts(postSearchRequest.getSearchCode(),
 														postSearchRequest.getSearchString(),
 														pageable);
 
@@ -75,7 +75,7 @@ public class PostService {
 	@PreAuthorize("@postChecker.isSelf(#postId) or hasAuthority('ADMIN')")
 	@Transactional
 	public void delete(final Long postId) {
-		final Post findPost = postRepository.findWithCommentsById(postId)
+		Post findPost = postRepository.findWithCommentsById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.POST_NOT_FOUND));
 
 		uploadFileService.deleteFiles(findPost.getImageIds());

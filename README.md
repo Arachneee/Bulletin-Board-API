@@ -1,5 +1,5 @@
 # Bulletin-Board-Api
-> Spring boot, Spring Data JPA, QueryDsl, Vue.js 로 CSR 방식으로 설계한 게시판입니다.
+> Spring boot, Spring Data JPA, Vue.js 로 CSR 방식으로 설계한 게시판입니다.
 
 ### 프로젝트 소개
 
@@ -13,6 +13,7 @@
 - **댓글 공감 API -** 공감, 취소, 중복 공감 제어, 셀프 공감 제어
   
 - **접근 권한 인터셉터 -** 비로그인 사용자 제한, 비권한 객체 수정 삭제 제한
+- -> Spring Security 로 변경
 - **예외 처리 Advice -** 비지니스 예외 처리, 권한 예외 처리
 
 
@@ -22,6 +23,7 @@
 - SpringBoot 3.3.1
 - Spring Data JPA
 - QueryDsl
+- Spring Security 6.1.3
 
 ##### 프론트엔드
 - Vue.js 3.3.4
@@ -39,9 +41,9 @@
 - ~~QueryDsl 도입~~
 - ~~대댓글 기능 추가~~
 - ~~첨부파일 기능 추가~~
-- 권한 분류
+- ~~권한 분류~~
+- ~~Spring Security 도입~~
 - JWT 인증 추가
-- Spring Security 도입
 - 로그처리 AOP 설계
 - MyPage, ID/PW 찾기
 - 쪽지보내기 기능 추가

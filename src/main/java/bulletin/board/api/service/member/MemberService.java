@@ -27,7 +27,7 @@ public class MemberService {
 	@Transactional
 	public Long create(final MemberRequest memberRequest) {
 		validateRequest(memberRequest);
-		final Member savedMember = save(memberRequest);
+		Member savedMember = save(memberRequest);
 
 		return savedMember.getId();
 	}
@@ -61,7 +61,7 @@ public class MemberService {
 
 	@Transactional(readOnly = true)
 	public MemberResponse findById(final Long id) {
-		final Member member = memberRepository.findById(id)
+		Member member = memberRepository.findById(id)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
 		return MemberResponse.from(member);
@@ -70,7 +70,7 @@ public class MemberService {
 	@PreAuthorize("@memberChecker.isSelf(#id) or hasAuthority('ADMIN')")
 	@Transactional
 	public void updateName(final Long id, final MemberNameRequest memberNameRequest) {
-		final Member findmember = memberRepository.findById(id)
+		Member findmember = memberRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
 
 		findmember.changeName(memberNameRequest.getName());

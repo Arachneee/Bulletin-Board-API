@@ -28,10 +28,10 @@ public class CommentService {
 
 	@Transactional
 	public Long create(final Member member, final Long postId, final CommentRequest commentRequest) {
-		final Post findPost = postRepository.findById(postId)
+		Post findPost = postRepository.findById(postId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.POST_NOT_FOUND));
 
-		final Comment comment = Comment.create(commentRequest.getCommentContent(), findPost, member);
+		Comment comment = Comment.create(commentRequest.getCommentContent(), findPost, member);
 		commentRepository.save(comment);
 
 		return comment.getId();
@@ -39,14 +39,14 @@ public class CommentService {
 
 	@Transactional(readOnly = true)
 	public Page<CommentResponse> findComments(final Long postId, final Member member, final Pageable pageable) {
-		final Page<Comment> comments = commentRepository.findWithMemberByPostIdAndParentCommentIsNull(postId, pageable);
+		Page<Comment> comments = commentRepository.findWithMemberByPostIdAndParentCommentIsNull(postId, pageable);
 
 		return comments.map(comment -> CommentResponse.of(comment, member));
 	}
 
 	@Transactional(readOnly = true)
 	public CommentResponse findComment(final Member member, final Long commentId) {
-		final Comment findComment = commentRepository.findWithMemberAndEmpathyById(commentId)
+		Comment findComment = commentRepository.findWithMemberAndEmpathyById(commentId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.COMMENT_NOT_FOUND));
 
 		return CommentResponse.of(findComment, member);
@@ -54,7 +54,7 @@ public class CommentService {
 
 	@Transactional(readOnly = true)
 	public BestCommentResponse findBestComment(final Member member, final Long postId) {
-		final Comment findComment = commentRepository.findTopCommentByPostId(postId)
+		Comment findComment = commentRepository.findTopCommentByPostId(postId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.COMMENT_NOT_FOUND));
 
 		return BestCommentResponse.of(findComment, member);
@@ -63,7 +63,7 @@ public class CommentService {
 	@PreAuthorize("@commentChecker.isSelf(#commentId) or hasAuthority('ADMIN')")
 	@Transactional
 	public void update(final Long commentId, final CommentRequest commentRequest) {
-		final Comment findComment = commentRepository.findById(commentId)
+		Comment findComment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.COMMENT_NOT_FOUND));
 
 		findComment.update(commentRequest.getCommentContent());
@@ -72,7 +72,7 @@ public class CommentService {
 	@PreAuthorize("@commentChecker.isSelf(#commentId) or hasAuthority('ADMIN')")
 	@Transactional
 	public void delete(final Long commentId) {
-		final Comment findComment = commentRepository.findWithEmpathyById(commentId)
+		Comment findComment = commentRepository.findWithEmpathyById(commentId)
 			.orElseThrow(() -> new EntityNotFoundException(ErrorCode.COMMENT_NOT_FOUND));
 
 		commentRepository.delete(findComment);
@@ -81,10 +81,10 @@ public class CommentService {
 
 	@Transactional
 	public Long createReply(final Member member, final Long commentId, final CommentRequest commentRequest) {
-		final Comment findComment = commentRepository.findWithPostById(commentId)
+		Comment findComment = commentRepository.findWithPostById(commentId)
 				.orElseThrow(() -> new EntityNotFoundException(ErrorCode.COMMENT_NOT_FOUND));
 
-		final Comment replyComment = Comment.createReply(commentRequest.getCommentContent(), findComment.getRootComment(), member);
+		Comment replyComment = Comment.createReply(commentRequest.getCommentContent(), findComment.getRootComment(), member);
 		commentRepository.save(replyComment);
 
 		return replyComment.getId();

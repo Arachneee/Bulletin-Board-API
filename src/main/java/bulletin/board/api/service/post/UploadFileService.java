@@ -43,9 +43,9 @@ public class UploadFileService {
             return;
         }
 
-        final String originalFilename = multipartFile.getOriginalFilename();
-        final String storeFileName = createStoreFileName(originalFilename);
-        final String blob = getFullPath(post.getId(), storeFileName);
+        String originalFilename = multipartFile.getOriginalFilename();
+        String storeFileName = createStoreFileName(originalFilename);
+        String blob = getFullPath(post.getId(), storeFileName);
 
         try {
             if(bucket.get(blob) != null) {
@@ -65,15 +65,15 @@ public class UploadFileService {
     }
 
     private String extractExt(final String originalFilename) {
-        final int pos = originalFilename.lastIndexOf(".");
+        int pos = originalFilename.lastIndexOf(".");
         return originalFilename.substring(pos + 1);
     }
 
     public ByteArrayResource findImage(final Long imageId) {
-        final UploadFile image = uploadFileRepository.findById(imageId)
+        UploadFile image = uploadFileRepository.findById(imageId)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.IMAGE_NOT_FOUND));
 
-        final byte[] content = bucket.get(image.getPath()).getContent();
+        byte[] content = bucket.get(image.getPath()).getContent();
 
         return new ByteArrayResource(content);
     }
@@ -87,7 +87,7 @@ public class UploadFileService {
 
     @Transactional
     public void delete(final Long imageId) {
-        final UploadFile image = uploadFileRepository.findById(imageId)
+        UploadFile image = uploadFileRepository.findById(imageId)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.IMAGE_NOT_FOUND));
 
         bucket.get(image.getPath()).delete();

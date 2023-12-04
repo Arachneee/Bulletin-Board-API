@@ -24,7 +24,7 @@ public class SecurityConfig {
                         .requestMatchers("/").permitAll()
                         .anyRequest().authenticated()
                 )
-                .logout((logout) -> logout.logoutSuccessUrl("/my/success/endpoint"))
+                .logout((logout) -> logout.logoutSuccessUrl("/"))
         ;
 
         return http.build();

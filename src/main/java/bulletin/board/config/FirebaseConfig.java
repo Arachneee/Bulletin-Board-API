@@ -17,10 +17,10 @@ public class FirebaseConfig {
 
 	@Bean
 	public FirebaseApp firebaseApp() throws IOException {
-		final FileInputStream serviceAccount = new FileInputStream(
+		FileInputStream serviceAccount = new FileInputStream(
 			"C:/Users/hogeon/Desktop/project/bulletin-board/board/src/main/resources/serviceAccountKey.json");
 
-		final FirebaseOptions options = FirebaseOptions.builder()
+		FirebaseOptions options = FirebaseOptions.builder()
 			.setCredentials(GoogleCredentials.fromStream(serviceAccount))
 			.setStorageBucket("board-d6466.appspot.com")
 			.build();
