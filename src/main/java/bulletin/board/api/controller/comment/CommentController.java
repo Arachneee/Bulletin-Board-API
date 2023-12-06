@@ -29,7 +29,6 @@ public class CommentController {
 												@PathVariable Long postId,
 												@Valid @RequestBody CommentRequest commentRequest) {
 		Long commentId = commentService.create(member, postId, commentRequest);
-
 		return ResponseEntity.created(URI.create("/posts/" + postId + "/comments/" + commentId)).build();
 	}
 
@@ -38,7 +37,6 @@ public class CommentController {
 						@Login Member member,
 						@PathVariable Long postId,
 						@PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
-
 		return ResponseEntity.ok().body(commentService.findComments(postId, member, pageable));
 	}
 
@@ -56,14 +54,12 @@ public class CommentController {
 	public ResponseEntity<Void> updateComment(@PathVariable Long commentId,
 											  @Valid @RequestBody CommentRequest commentRequest) {
 		commentService.update(commentId, commentRequest);
-
 		return ResponseEntity.ok().build();
 	}
 
 	@DeleteMapping("/{commentId}")
 	public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
 		commentService.delete(commentId);
-
 		return ResponseEntity.noContent().build();
 	}
 
@@ -73,7 +69,6 @@ public class CommentController {
 											@PathVariable Long commentId,
 											@Valid @RequestBody CommentRequest commentRequest) {
 		Long replyCommentId = commentService.createReply(member, commentId, commentRequest);
-
 		return ResponseEntity.created(URI.create("/posts/" + postId + "/comments/" + commentId + "/replies/" + replyCommentId)).build();
 	}
 
