@@ -18,14 +18,12 @@ public class CommentEmpathyController {
 	public ResponseEntity<Void> createCommentEmpathy(@Login Member member,
 														@PathVariable Long commentId) {
 		commentEmpathyService.create(member, commentId);
-
 		return ResponseEntity.accepted().build();
 	}
 
 	@DeleteMapping("")
 	public ResponseEntity<Void> deleteCommentEmpathy(@Login Member member, @PathVariable Long commentId) {
 		commentEmpathyService.delete(member, commentId);
-
 		return ResponseEntity.noContent().build();
 	}
 
