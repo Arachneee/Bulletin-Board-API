@@ -37,7 +37,6 @@ public class PostController {
 	@PostMapping("")
 	public ResponseEntity<Void> createPost(@Login Member member, PostRequest postRequest) {
 		Long postId = postService.create(member, postRequest);
-
 		return ResponseEntity.created(URI.create("/posts/" + postId)).build();
 	}
 
@@ -45,7 +44,6 @@ public class PostController {
 	public ResponseEntity<Page<PostResponse>> findPosts(
 		@Valid PostSearchRequest postSearchRequest,
 		@Valid @PageableDefault(sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
-
 		Page<PostResponse> posts = postService.findPosts(postSearchRequest, pageable);
 		return ResponseEntity.ok().body(posts);
 	}
@@ -53,29 +51,24 @@ public class PostController {
 	@GetMapping("/{id}")
 	public ResponseEntity<PostDetailResponse> findPost(@Login Member member, @PathVariable Long id) {
 		PostDetailResponse post = postService.findPost(member, id);
-
 		return ResponseEntity.ok().body(post);
 	}
 
 	@PatchMapping("/{id}")
 	public ResponseEntity<Void> updatePost(@PathVariable("id") Long id, @Valid PostRequest postRequest) {
 		postService.update(id, postRequest);
-
 		return ResponseEntity.ok().build();
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deletePost(@PathVariable("id") Long id) {
 		postService.delete(id);
-
 		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping("/{id}/images/{imageId}")
 	public ResponseEntity<Resource> findImage(@PathVariable Long imageId) {
-
 		ByteArrayResource resource = uploadFileService.findImage(imageId);
-
 		return ResponseEntity.ok()
 				.contentType(MediaType.APPLICATION_OCTET_STREAM)
 				.contentLength(resource.contentLength())
@@ -88,9 +81,7 @@ public class PostController {
 
 	@DeleteMapping("/{id}/images/{imageId}")
 	public ResponseEntity<Void> deleteImage(@PathVariable Long imageId) {
-
 		uploadFileService.delete(imageId);
-
 		return ResponseEntity.noContent().build();
 	}
 }
